@@ -12,12 +12,12 @@ Map('n', '<leader>tt', builtin.builtin)
 Map('n', '<leader>tr', builtin.resume)
 Map('n', '<leader>tv', builtin.lsp_document_symbols)
 Map('n', '<leader>tV', builtin.treesitter)
-Map('n', '<leader>tr', builtin.lsp_references)
+Map('n', '<leader>tu', builtin.lsp_references)
 Map('n', '<leader>td', builtin.diagnostics)
 Map('n', '<leader>tk', builtin.keymaps)
 Map('n', '<leader>tp', builtin.commands)
-Map('n', '<leader>th', builtin.oldfiles)
-Map('n', '<leader>t?', builtin.help_tags)
+Map('n', '<leader>to', builtin.oldfiles)
+Map('n', '<leader>th', builtin.help_tags)
 
 require("telescope").setup({
   defaults = {
@@ -26,6 +26,9 @@ require("telescope").setup({
         ["<esc>"] = actions.close,
       },
     },
+    layout_config = {
+      scroll_speed = 3
+    }
   },
 })
 
