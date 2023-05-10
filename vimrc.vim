@@ -531,9 +531,6 @@ function g:CJClipboardItems()
   return clip
 endfunction
 
-nnoremap <silent> <F4>v :call g:CJClipboardItems()<CR>
-inoremap <silent> <F4>v <esc>:let g:CJIsInsert=1 \| call g:CJClipboardItems()<CR>
-
 function s:closeUselessBuffers()
 	for b in filter(range(1,bufnr('$')), 'bufexists(v:val)')
     let bi = getbufinfo(b)[0]

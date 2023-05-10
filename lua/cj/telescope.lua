@@ -5,12 +5,19 @@ local themes = require "telescope.themes"
 local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
 
-vim.keymap.set('n', '<C-p>', builtin.find_files, { noremap = true })
-vim.keymap.set('n', '<leader>th', builtin.oldfiles, { noremap = true })
-vim.keymap.set('n', '<leader>ps', function()
-  builtin.grep_string({ search = vim.fn.input("Grep > ") })
-end, { noremap = true })
-vim.keymap.set('n', '<leader>vh', builtin.help_tags, { noremap = true })
+Map('n', '<C-p>', builtin.find_files)
+Map('n', '<M-p>', builtin.git_files)
+Map('n', '<leader>t/', ":silent! lua require'telescope.builtin'.current_buffer_fuzzy_find()<CR>", {silent = true})
+Map('n', '<leader>tt', builtin.builtin)
+Map('n', '<leader>tr', builtin.resume)
+Map('n', '<leader>tv', builtin.lsp_document_symbols)
+Map('n', '<leader>tV', builtin.treesitter)
+Map('n', '<leader>tr', builtin.lsp_references)
+Map('n', '<leader>td', builtin.diagnostics)
+Map('n', '<leader>tk', builtin.keymaps)
+Map('n', '<leader>tp', builtin.commands)
+Map('n', '<leader>th', builtin.oldfiles)
+Map('n', '<leader>t?', builtin.help_tags)
 
 require("telescope").setup({
   defaults = {
