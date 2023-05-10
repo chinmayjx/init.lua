@@ -7,8 +7,12 @@ local action_state = require "telescope.actions.state"
 
 Map('n', '<C-p>', builtin.find_files)
 Map('n', '<M-p>', builtin.git_files)
-Map('n', '<leader>t/', ":silent! lua require'telescope.builtin'.current_buffer_fuzzy_find()<CR>", {silent = true})
+Map('n', '<leader>t/', ":silent! lua require'telescope.builtin'.current_buffer_fuzzy_find()<CR>", { silent = true })
+Map('n', '<leader>ts', function()
+  builtin.live_grep({})
+end)
 Map('n', '<leader>tt', builtin.builtin)
+Map('n', '<leader>tb', builtin.buffers)
 Map('n', '<leader>tr', builtin.resume)
 Map('n', '<leader>tv', builtin.lsp_document_symbols)
 Map('n', '<leader>tV', builtin.treesitter)

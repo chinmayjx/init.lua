@@ -53,6 +53,10 @@ Map("n", "<C-S-right>", ":bn<CR>")
 Map("n", "<C-S-left>", ":bp<CR>")
 Map("n", ",x", ":bd<CR>")
 
+Map("n", "<leader>co", ":copen<CR>")
+Map("n", "<leader>cn", ":cnext<CR>")
+Map("n", "<leader>cp", ":cprev<CR>")
+
 Map("n", "<leader>;", ":15sp term://bash | startinsert<CR>")
 Map("n", ",p", function() SelectFromList(vim.fn.CJGetProjects(), vim.fn.CJProjectSelect) end)
 Map("n", "<enter>", function() SelectFromList(vim.fn.CJBuffs(), vim.fn.CJBuffSelect) end)
