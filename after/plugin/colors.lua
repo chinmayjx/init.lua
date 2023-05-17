@@ -1,15 +1,16 @@
-require('rose-pine').setup({
-    disable_background = true
-})
-
-function TransparentTheme(color)
-	color = color or "rose-pine"
-	vim.cmd.colorscheme(color)
-
-	vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
-
+function TransparentTheme(opts)
+  require(opts.module).setup({
+    disable_background = true,
+    transparent = true
+  })
+  vim.cmd.colorscheme(opts.theme)
+  local groups = {
+    'Normal', 'NormalNC', 'NormalFloat'
+  }
+  for i = 1, #groups do
+    vim.api.nvim_set_hl(0, groups[i], { bg = "none" })
+  end
 end
 
-TransparentTheme()
+TransparentTheme({ module = "nightfox", theme = "terafox" })
 -- vim.cmd.colorscheme('sonokai')

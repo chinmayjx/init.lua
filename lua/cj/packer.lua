@@ -6,14 +6,12 @@ return require('packer').startup(function(use)
     -- or                            , branch = '0.1.x',
     requires = { { 'nvim-lua/plenary.nvim' } }
   }
-  use({
-    'rose-pine/neovim',
-    as = 'rose-pine',
-    config = function()
-      vim.cmd('colorscheme rose-pine')
-    end
-  })
+  use({ 'rose-pine/neovim' })
+  use 'folke/tokyonight.nvim'
+  use { "ellisonleao/gruvbox.nvim" }
+  use "EdenEast/nightfox.nvim"
   use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
+  use 'lewis6991/gitsigns.nvim'
   use {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'v2.x',
@@ -29,9 +27,11 @@ return require('packer').startup(function(use)
       -- Autocompletion
       { 'hrsh7th/nvim-cmp' },     -- Required
       { 'hrsh7th/cmp-nvim-lsp' }, -- Required
+      { 'hrsh7th/cmp-buffer' }, -- Required
       { 'L3MON4D3/LuaSnip' },     -- Required
     }
   }
+  use { 'mhartington/formatter.nvim' }
   use {
     'nvim-tree/nvim-tree.lua',
     requires = {

@@ -158,8 +158,7 @@ vnoremap <Leader>{ "sdi{<C-r>s}
 inoremap <C-Del> <C-o>dw
 inoremap <C-h> <C-w>
 inoremap <C-v> <C-r>"
-inoremap <M-z> <C-o>u
-inoremap <M-Z> <C-o><C-r>
+inoremap <M-u> <C-o>u
 inoremap <Home> <C-o>^
 inoremap <C-s> <C-o>:w<CR>
 nnoremap <C-s> :w<CR>
@@ -191,7 +190,7 @@ nnoremap <M-k> <C-w><up>
 nnoremap <M-S-j> :sp<CR>
 nnoremap <M-S-l> :vs<CR>
 
-tnoremap <M-x> <C-\><C-n>
+tnoremap <M-e> <C-\><C-n>
 tnoremap <M-k> <C-\><C-n><C-w><up>
 tnoremap <M-j> <C-\><C-n><C-w><down>
 tnoremap <M-h> <C-\><C-n><C-w><left>
@@ -349,7 +348,7 @@ function s:CJFileTypeInit()
     nmap <buffer> ,co vie:s/  / /g<CR><C-l>gv<
   elseif x == "md"
     call s:checkboxSetup()
-    inoremap <buffer><M-i> __<left>
+    inoremap <buffer><M-i> **<left>
     inoremap <buffer><F4>3 ###<space>
     inoremap <buffer><F4>4 ####<space>
     inoremap <buffer><F4>5 #####<space>

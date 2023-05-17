@@ -41,7 +41,7 @@ function SendToIpython()
   for i = 1, #cell do
     vim.api.nvim_feedkeys(cell[i] .. vim.api.nvim_replace_termcodes("<C-q><C-j>", true, true, true), 'n', false)
   end
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<escape><enter>", true, true, true), 'n', false)
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<escape><C-l><enter>", true, true, true), 'n', false)
   vim.defer_fn(function() vim.api.nvim_set_current_win(current_window) end, 100)
 end
 

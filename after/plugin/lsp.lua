@@ -1,14 +1,12 @@
-local lsp = require('lsp-zero').preset({})
+local lspz = require('lsp-zero').preset({})
 
-lsp.on_attach(function(client, bufnr)
+lspz.on_attach(function(client, bufnr)
   local opts = { buffer = bufnr, noremap = true }
-  lsp.default_keymaps({ buffer = bufnr })
+  lspz.default_keymaps({ buffer = bufnr })
   vim.keymap.set("n", "<leader>ff", vim.lsp.buf.format, opts)
 end)
-
-require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
-
-lsp.setup()
+require('lspconfig').lua_ls.setup(lspz.nvim_lua_ls())
+lspz.setup()
 
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
@@ -21,11 +19,16 @@ cmp.setup({
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<CR>'] = cmp.mapping.confirm({ select = true }),
   },
-  sources = cmp.config.sources({
-    { name = 'nvim_lsp' },
-    { name = 'buffer' },
-  })
+  sources = cmp.config.sources(
+    {
+      { name = 'nvim_lsp' }
+    },
+    {
+      { name = 'buffer' },
+    }
+  )
 })
 
 Map('n', '<leader>e', vim.diagnostic.open_float)
+Map('n', '<leader>fg', ":Format<CR>")
 Map('n', '<leader><F2>', function() vim.lsp.buf.rename(vim.fn.input("rename to: ")) end)

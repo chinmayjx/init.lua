@@ -5,7 +5,36 @@ local themes = require "telescope.themes"
 local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
 
-Map('n', '<C-p>', builtin.find_files)
+local ignore_dirs = {
+  'node_modules',
+  '.venv',
+  '.git',
+  'dist',
+}
+local ignore_files = {
+  '.sesh.vim'
+}
+
+local cmd = {
+  "rg",
+  "--files",
+  "--hidden",
+  "--no-ignore-dot",
+  "--no-ignore-exclude",
+  "--no-ignore-global",
+  "--no-ignore-vcs",
+  "--no-ignore-parent"
+}
+for i = 1, #ignore_dirs do
+  table.insert(cmd, "-g")
+  table.insert(cmd, "!" .. ignore_dirs[i])
+end
+for i = 1, #ignore_files do
+  table.insert(cmd, "-g")
+  table.insert(cmd, "!" .. ignore_files[i])
+end
+Map('n', '<C-p>', function() builtin.find_files({ find_command = cmd }) end)
+Map('n', '<C-M-p>', function() builtin.find_files({ hidden = true, no_ignore = true, no_ignore_parent = true }) end)
 Map('n', '<M-p>', builtin.git_files)
 Map('n', '<leader>t/', ":silent! lua require'telescope.builtin'.current_buffer_fuzzy_find()<CR>", { silent = true })
 Map('n', '<leader>ts', function()
@@ -42,7 +71,6 @@ local conf = require("telescope.config").values
 function SelectFromList(list, action)
   local p_window = require('telescope.pickers.window')
   local opts = themes.get_dropdown { layout_strategy = "center", layout_config = { width = 0.5, anchor = "N" } }
-  print(vim.inspect(opts))
   pickers.new(opts, {
     prompt_title = "title",
     finder = finders.new_table {
