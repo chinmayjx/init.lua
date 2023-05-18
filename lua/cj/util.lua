@@ -15,13 +15,17 @@ local function autoPair()
     ["'"] = "'",
     ["`"] = "`",
   }
-
   local function handleContext(x)
-    if vim.treesitter.get_node():type() == 'string' then
-      Feedkeys(x)
-      return true
+    local function _handle()
+      if vim.treesitter.get_node():type() == 'string' then
+        Feedkeys(x)
+        return true
+      end
+      return false
     end
-    return false
+
+    local st, res = pcall(_handle)
+    return st and res
   end
 
   local function enterOpenChar(o)
@@ -47,8 +51,9 @@ local function autoPair()
   end
 
   local function enterRepeatChar(c)
-    if handleContext(c) then
-      return
+    local st, inString = pcall(function() return vim.treesitter.get_node():type() == "string" end)
+    if not st then
+      inString = true
     end
     local cur = vim.api.nvim_win_get_cursor(0)
     local line = vim.api.nvim_get_current_line()
@@ -57,7 +62,11 @@ local function autoPair()
       cur[2] = cur[2] + 1
       vim.api.nvim_win_set_cursor(0, cur)
     else
-      Feedkeys(c .. c .. ReplaceTermcodes('<left>'))
+      if inString then
+        Feedkeys(c)
+      else
+        Feedkeys(c .. c .. ReplaceTermcodes('<left>'))
+      end
     end
   end
 

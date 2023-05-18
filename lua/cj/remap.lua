@@ -79,3 +79,9 @@ Map("i", "<F4>v", function()
   SelectFromList(vim.fn.CJClipboardItems(), vim.fn.CJpaste)
   vim.cmd.startinsert()
 end)
+SMap("n", "<leader>ca", vim.lsp.buf.code_action)
+
+vim.cmd [[
+  nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
+  nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
+]]
