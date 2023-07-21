@@ -333,7 +333,7 @@ function s:CJFileTypeInit()
 	" let autoCloseSolo = "`"
 	let b:CJCommentChar = '#'
 	let x = expand('%:e')
-	if index(["c","cpp","java","js","ts","h"],x) >= 0
+	if index(["c","cpp","java","js","jsx","ts","tsx","h"],x) >= 0
 		let b:CJCommentChar = '\/\/'
 	elseif x == "vim"
 		let b:CJCommentChar = '"'
