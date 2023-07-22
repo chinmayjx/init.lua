@@ -4,6 +4,7 @@ local finders = require "telescope.finders"
 local themes = require "telescope.themes"
 local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
+local trouble = require("trouble.providers.telescope")
 
 local ignore_dirs = {
   'node_modules',
@@ -61,7 +62,11 @@ require("telescope").setup({
     mappings = {
       i = {
         ["<esc>"] = actions.close,
+        ["<c-t>"] = trouble.open_with_trouble,
       },
+      n = {
+        ["<c-t>"] = trouble.open_with_trouble,
+      }
     },
     layout_config = {
       scroll_speed = 3
