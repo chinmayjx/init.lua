@@ -19,6 +19,7 @@ local ignore_files = {
 local cmd = {
   "rg",
   "--files",
+  "--follow",
   "--hidden",
   "--no-ignore-dot",
   "--no-ignore-exclude",

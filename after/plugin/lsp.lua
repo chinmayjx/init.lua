@@ -4,6 +4,7 @@ lspz.on_attach(function(client, bufnr)
   local opts = { buffer = bufnr, noremap = true }
   lspz.default_keymaps({ buffer = bufnr })
   vim.keymap.set("n", "<leader>ff", vim.lsp.buf.format, opts)
+  vim.keymap.set("v", "<leader>ff", vim.lsp.buf.format, opts)
 end)
 require('lspconfig').lua_ls.setup(lspz.nvim_lua_ls())
 lspz.setup()

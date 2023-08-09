@@ -12,6 +12,9 @@ require("formatter").setup {
     javascriptreact = {
       filetypes.javascriptreact.prettier
     },
+    typescript = {
+      filetypes.typescript.prettier
+    },
     scss = {
       filetypes.css.prettier
     },

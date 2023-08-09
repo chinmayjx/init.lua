@@ -358,6 +358,8 @@ function s:CJFileTypeInit()
 		nnoremap <buffer> ,tt :TableFormat<CR>
 		vnoremap <buffer> ., :s/^##/#/<CR>:noh<CR>gv
 		vnoremap <buffer> ,. :s/^#/##/<CR>:noh<CR>gv
+  elseif x == "man"
+    set filetype=man
 	endif
 
   " for i in range(0,len(autoClose)-1,2)
