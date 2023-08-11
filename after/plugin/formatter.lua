@@ -9,6 +9,9 @@ require("formatter").setup {
     python = {
       filetypes.python.autopep8
     },
+    javascript = {
+      filetypes.javascript.prettier
+    },
     javascriptreact = {
       filetypes.javascriptreact.prettier
     },

@@ -109,4 +109,5 @@ require('mason-lspconfig').setup_handlers({
 
 Map('n', '<leader>e', vim.diagnostic.open_float)
 Map('n', '<leader>fg', ":Format<CR>")
+Map('v', '<leader>fg', ":Format<CR>")
 Map('n', '<leader><F2>', function() vim.lsp.buf.rename(vim.fn.input("rename to: ")) end)

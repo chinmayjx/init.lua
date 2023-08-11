@@ -5,7 +5,6 @@ return require('packer').startup(function(use)
     'nvim-telescope/telescope.nvim', tag = '0.1.1',
     requires = { { 'nvim-lua/plenary.nvim' } }
   }
-  use "EdenEast/nightfox.nvim"
   use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
   use {
     "windwp/nvim-autopairs",
@@ -26,6 +25,7 @@ return require('packer').startup(function(use)
   use { 'hrsh7th/nvim-cmp' }
   use { 'hrsh7th/cmp-nvim-lsp' }
   use { 'hrsh7th/cmp-buffer' }
+  use { 'hrsh7th/cmp-path' }
   use { 'L3MON4D3/LuaSnip' }
   use { 'mhartington/formatter.nvim' }
   use {
@@ -34,4 +34,6 @@ return require('packer').startup(function(use)
       'nvim-tree/nvim-web-devicons', -- optional
     },
   }
+  -- Themes
+  use "EdenEast/nightfox.nvim"
 end)
