@@ -1,6 +1,6 @@
+require('cj.util')
 require('cj.remap')
 require('cj.set')
 require('cj.telescope')
 require('cj.packer')
 require('cj.ipython')
-require('cj.util')
