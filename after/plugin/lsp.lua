@@ -49,28 +49,35 @@ local defaultKeymaps = function(opts)
   map('n', ']d', diagnostic 'goto_next()')
 end
 
-local nvimLuaLS = function (opts)
+local nvimLuaLS = function(opts)
   local runtime_path = vim.split(package.path, ';')
   table.insert(runtime_path, 'lua/?.lua')
   table.insert(runtime_path, 'lua/?/init.lua')
+  local root = "/home/chinmay/.local/share/nvim/site/pack/packer/start/"
+  local lib_paths = {
+    vim.fn.expand('$VIMRUNTIME/lua'),
+    vim.fn.stdpath('config') .. '/lua',
+  }
+  local plugs = vim.fn.readdir(root)
+  for _, v in ipairs(plugs) do
+    table.insert(lib_paths, root .. v .. "/lua")
+  end
+
 
   local config = {
     settings = {
       Lua = {
-        telemetry = {enable = false},
+        telemetry = { enable = false },
         runtime = {
           version = 'LuaJIT',
           path = runtime_path,
         },
         diagnostics = {
-          globals = {'vim'}
+          globals = { 'vim' }
         },
         workspace = {
           checkThirdParty = false,
-          library = {
-            vim.fn.expand('$VIMRUNTIME/lua'),
-            vim.fn.stdpath('config') .. '/lua',
-          }
+          library = lib_paths
         }
       }
     }
@@ -96,9 +103,9 @@ require('mason-lspconfig').setup_handlers({
   function(server_name)
     if server_name == 'lua_ls' then
       return lspconfig.lua_ls.setup(nvimLuaLS({
-      on_attach = lsp_attach,
-      capabilities = lsp_capabilities,
-    }))
+        on_attach = lsp_attach,
+        capabilities = lsp_capabilities,
+      }))
     end
     lspconfig[server_name].setup({
       on_attach = lsp_attach,

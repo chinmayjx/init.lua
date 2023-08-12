@@ -38,6 +38,6 @@ local WidthToggle = function()
 end
 
 Map("n", "<leader>qq", vim.cmd.NvimTreeToggle)
-Map("n", "<leader>qc", function() api.tree.open({ find_file = true }) end)
+Map("n", "<leader>qc", function() api.tree.open({ find_file = true, update_root = true }) end)
 Map("n", "<C-q>", vim.cmd.NvimTreeOpen)
 Map("n", "<leader>qw", WidthToggle)
