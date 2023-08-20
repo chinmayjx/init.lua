@@ -45,7 +45,7 @@ local updateWinBuffs = function(opts)
   -- print(vim.inspect(winBuffs[winId]))
 end
 
-vim.api.nvim_create_autocmd({ "BufEnter" }, {
+vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
   group = grpName,
   pattern = "*",
   callback = updateWinBuffs

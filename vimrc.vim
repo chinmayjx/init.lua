@@ -87,12 +87,12 @@ function g:CJSaveVimsesh()
 	endif
 	silent exec "!echo " . sf . " >> ~/.vimprojects"
   :NvimTreeClose
-  let tmp = {}
-  for k in keys(g:CJWinBuffs)
-    let  tmp[win_id2win(k)] = g:CJWinBuffs[k]
-  endfor
+  " let tmp = {}
+  " for k in keys(g:CJWinBuffs)
+    " let  tmp[win_id2win(k)] = g:CJWinBuffs[k]
+  " endfor
 	silent exec "mks! " . sf . "/.sesh.vim"
-	silent exec "!echo \"let g:CJWinBuffs = " . escape(string(tmp), "\\") . "\" >> " . sf . "/.sesh.vim"
+	" silent exec "!echo \"let g:CJWinBuffs = " . escape(string(tmp), "\\") . "\" >> " . sf . "/.sesh.vim"
 	silent exec "!echo \"let g:CJLoadedSeshName = '" . sf . "'\" >> " . sf . "/.sesh.vim"
 endfunction
 
