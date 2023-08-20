@@ -90,7 +90,7 @@ function SelectFromList(list, action)
       actions.select_default:replace(function()
         actions.close(prompt_bufnr)
         local selection = action_state.get_selected_entry()
-        action(selection[1])
+        action(selection)
       end)
       return true
     end,

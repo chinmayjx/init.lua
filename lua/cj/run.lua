@@ -37,6 +37,7 @@ local run = function()
   local fn = vim.fn.expand("%:t")
   local fwd = vim.fn.expand("%:h")
   local cwd = vim.fn.getcwd()
+  vim.cmd("w")
 
   local dirTerm = function(cmd)
     runInDirectory(cmd, fwd)

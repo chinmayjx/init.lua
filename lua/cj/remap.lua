@@ -59,7 +59,7 @@ Map("n", "<leader>li", ":lua print(vim.inspect())<left><left>")
 
 Map("n", "<leader>;", ":15sp term://bash | startinsert<CR>")
 Map("n", ",p", function() SelectFromList(vim.fn.CJGetProjects(), vim.fn.CJProjectSelect) end)
-Map("n", "<enter>", function() SelectFromList(vim.fn.CJBuffs(), vim.fn.CJBuffSelect) end)
+-- Map("n", "<enter>", function() SelectFromList(vim.fn.CJBuffs(), vim.fn.CJBuffSelect) end)
 Map("n", "<F4>v", function()
   SelectFromList(vim.fn.CJClipboardItems(), vim.fn.CJpaste)
   vim.cmd.startinsert()

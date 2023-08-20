@@ -355,80 +355,78 @@ function g:CJProjectSelect(p)
   call feedkeys(':call g:CJInitializeSession("' . sel . "\")\<CR>")
 endfunction
 
-if !exists("g:CJWinBuffs")
-	let g:CJWinBuffs = {}
-endif
+" if !exists("g:CJWinBuffs")
+	" let g:CJWinBuffs = {}
+" endif
 
-function g:CJAllBuffNames()
-	let bf = []
-	for bid in filter(range(1, bufnr('$')), 'bufexists(v:val) && buflisted(v:val)')
-		let nm=bufname(bid)
-		if empty(nm)
-			let nm=bid
-		endif
-		call add(bf, nm)
-	endfor
-	return bf
-endfunction
+" function g:CJAllBuffNames()
+	" let bf = []
+	" for bid in filter(range(1, bufnr('$')), 'bufexists(v:val) && buflisted(v:val)')
+		" let nm=bufname(bid)
+		" if empty(nm)
+			" let nm=bid
+		" endif
+		" call add(bf, nm)
+	" endfor
+	" return bf
+" endfunction
 
-function g:CJUpdateWinBuffs()
-	if win_gettype() == "popup"
-		return
-	endif
-	let win_id = win_getid() 
-	let buf_id = winbufnr(win_getid())
-	let buf_nm = bufname(buf_id)
-	if empty(buf_nm)
-		let buf_nm=buf_id
-	endif
-	if has_key(g:CJWinBuffs, win_id) == 0
-		let g:CJWinBuffs[win_id] = []
-	endif
-	if len(g:CJWinBuffs[win_id]) > 0 && g:CJWinBuffs[win_id][0] == buf_nm
-		return
-	endif
-	call insert(g:CJWinBuffs[win_id], buf_nm, 0)
-endfunction
-
-function g:CJBuffSelect(arg)
-	let arc = a:arg
-	let i = g:CJIndex(arc, ':')
-	if i>0
-		let arc = arc[i+2:] . arc[:i-1]
-	endif
-	execute("b " . arc)
-endfunction
-
-function g:CJBuffs()
-	let win_id = win_getid()
-	let tmp = {}
-	let fil = []
-	if !has_key(g:CJWinBuffs, win_id)
-		let g:CJWinBuffs[win_id] = []
-	endif
-	call extend(g:CJWinBuffs[win_id], g:CJAllBuffNames())
-	for buf in g:CJWinBuffs[win_id]
-		let bid = bufnr(buf)
-		if !has_key(tmp, bid)
-			call add(fil, buf)
-			let tmp[bid] = 1
-		endif
-	endfor
-	let g:CJWinBuffs[win_id] = deepcopy(fil)
-	for i in range(len(fil))
-		let tail = ""
-		let j=len(fil[i])-1
-		while j>=0 && fil[i][j]!='/'
-			let tail = fil[i][j] . tail
-			let j=j-1
-		endwhile
-		let fil[i] = tail . (j > 0 ? "::" . fil[i][:j] : "")
-	endfor
-  return fil[1:]
-	" call fzf#run({'source': fil, 'sink': function('g:CJBuffSelect'), 'options': "--header-lines 1 ", 'window': {'relative': 1, 'width': 0.8, 'height': 0.4, 'xoffset': 0.5, 'yoffset': 0}})
-endfunction
-
-nnoremap <silent> <CR> :call g:CJBuffs()<CR>
+" function g:CJUpdateWinBuffs()
+	" if win_gettype() == "popup"
+		" return
+	" endif
+	" let win_id = win_getid() 
+	" let buf_id = winbufnr(win_getid())
+	" let buf_nm = bufname(buf_id)
+	" if empty(buf_nm)
+		" let buf_nm=buf_id
+	" endif
+	" if has_key(g:CJWinBuffs, win_id) == 0
+		" let g:CJWinBuffs[win_id] = []
+	" endif
+	" if len(g:CJWinBuffs[win_id]) > 0 && g:CJWinBuffs[win_id][0] == buf_nm
+		" return
+	" endif
+	" call insert(g:CJWinBuffs[win_id], buf_nm, 0)
+" endfunction
+" 
+" function g:CJBuffSelect(arg)
+	" let arc = a:arg
+	" let i = g:CJIndex(arc, ':')
+	" if i>0
+		" let arc = arc[i+2:] . arc[:i-1]
+	" endif
+	" execute("b " . arc)
+" endfunction
+" 
+" function g:CJBuffs()
+	" let win_id = win_getid()
+	" let tmp = {}
+	" let fil = []
+	" if !has_key(g:CJWinBuffs, win_id)
+		" let g:CJWinBuffs[win_id] = []
+	" endif
+	" call extend(g:CJWinBuffs[win_id], g:CJAllBuffNames())
+	" for buf in g:CJWinBuffs[win_id]
+		" let bid = bufnr(buf)
+		" if !has_key(tmp, bid)
+			" call add(fil, buf)
+			" let tmp[bid] = 1
+		" endif
+	" endfor
+	" let g:CJWinBuffs[win_id] = deepcopy(fil)
+	" for i in range(len(fil))
+		" let tail = ""
+		" let j=len(fil[i])-1
+		" while j>=0 && fil[i][j]!='/'
+			" let tail = fil[i][j] . tail
+			" let j=j-1
+		" endwhile
+		" let fil[i] = tail . (j > 0 ? "::" . fil[i][:j] : "")
+	" endfor
+  " return fil[1:]
+	" " call fzf#run({'source': fil, 'sink': function('g:CJBuffSelect'), 'options': "--header-lines 1 ", 'window': {'relative': 1, 'width': 0.8, 'height': 0.4, 'xoffset': 0.5, 'yoffset': 0}})
+" endfunction
 
 let g:CJIsInsert = 1
 function g:CJpaste(s)
@@ -486,8 +484,8 @@ endfunction
 augroup CJaucmd
 	autocmd!
 	autocmd BufWrite * call s:saveAction()
-	autocmd BufEnter * call g:CJUpdateWinBuffs()
-	autocmd WinEnter * call g:CJUpdateWinBuffs()
+	" autocmd BufEnter * call g:CJUpdateWinBuffs()
+	" autocmd WinEnter * call g:CJUpdateWinBuffs()
 	autocmd BufReadPre * call s:CJFileTypeInit()
 	autocmd BufNewFile * call s:CJFileTypeInit()
 	autocmd TermOpen * call s:CJTermSetup()
