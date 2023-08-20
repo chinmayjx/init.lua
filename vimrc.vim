@@ -214,67 +214,6 @@ set foldnestmax=10
 set nofoldenable
 set wildignore=*/node_modules/*,*/__pycache__/*
 
-function g:CJrunInTerm(cmd)
-	let term_height = 15
-	let pre = term_height . "sp "
-	if str2float(&lines)/&columns < 0.3
-		let pre = "vs "
-	endif
-	exec  pre . "term://" . a:cmd . " | startinsert"
-endfunction
-
-function g:CJrun()
-	let run_cmd_fn = ".run_cmd"
-	if file_readable(run_cmd_fn)
-		:w
-		call g:CJrunInTerm('source ' . run_cmd_fn)
-		return
-	endif
-
-	let CJhome = expand("~")
-	let x = expand('%:e')
-	let fbn = expand('%:t:r')
-	let fn = expand('%:t')
-	let owd = getcwd()
-	let wd = expand('%:h')
-	exec "w | cd " . wd
-	if index(["c","cpp"],x) >= 0
-		if getcwd() == CJhome . '/documents/dsal'
-			call g:CJrunInTerm("./run " . fbn)
-		else
-			call g:CJrunInTerm("g++ -o " . fbn . " " .  fn . "; ./" . fbn)
-		endif
-	elseif index(["js","mjs"],x) >= 0
-		call g:CJrunInTerm("node " . fn)
-	elseif index(["sh","bash"],x) >= 0
-		call g:CJrunInTerm("bash " . fn)
-	elseif x == "py"
-		call g:CJrunInTerm("python3 " . fn)
-	elseif x == "ts"
-		call g:CJrunInTerm("npx ts-node " . fn)
-	elseif x == "rs"
-			call g:CJrunInTerm("rustc -o " . fbn . " " .  fn . "; ./" . fbn)
-	elseif x == "java"
-		call g:CJrunInTerm("javac " . fn . " && java " . fbn)
-	elseif x == "lua"
-		call g:CJrunInTerm("lua " . fn)
-	elseif x == "sha256"
-		exec 'w !tr -d "\\n" | sha256sum'
-	elseif fn == "termux.properties"
-		w | !termux-reload-settings
-	elseif x == "curl"
-		:w | w !python3 ~/github/python/curl.py
-	elseif x == "sql"
-    call g:CJrunInTerm('sqlite3 -init ' . fbn . '.sql ' . fbn . '.db')
-	elseif x == "tex"
-		:w | VimtexCompile
-	endif
-	exec "cd " . owd
-endfunction
-
-noremap <M-b> :call g:CJrun()<CR>
-inoremap <M-b> <C-o>:call g:CJrun()<CR>
-
 nnoremap <Leader>`n :e ~/.config/nvim/init.lua<CR>
 nnoremap <Leader>`s :w \| source ~/.config/nvim/init.lua<CR>
 nnoremap <Leader>`t :e ~/.config/nvim/snippets/
@@ -312,14 +251,6 @@ function s:InsertTime()
 endfunction
 
 function s:toggleCheckBox()
-  " let states = ["y", "x"]
-  " for i in range(0, len(states)-1)
-    " let status = execute('keeppatterns s/\(-\s*\)\[' . states[i] . '\]/\1[' . states[(i+1)%len(states)] . ']/')
-    " if status==0
-      " break
-    " endif
-    " echom i . status
-  " endfor
   let cases = [ ' ', 'x', ' '] " extra space to help cycling
   exec 'keeppatterns s#^\s*- \[\zs['.join(cases,'').']\ze\]#\=cases[index(cases, submatch(0))+1]#'
 endfunction
@@ -342,9 +273,6 @@ function s:CJFileTypeInit()
 	elseif x == "tex"
 		let b:CJCommentChar = '%'
     let autoCloseSolo=autoCloseSolo . "$"
-		nnoremap <buffer><silent> ,. :VimtexView<CR>
-		nnoremap <buffer><silent> <M-w> :VimtexTocToggle<CR>
-		nnoremap <buffer><silent> ,er :VimtexErrors<CR>
     nmap <buffer> ,co vie:s/  / /g<CR><C-l>gv<
   elseif x == "md"
     call s:checkboxSetup()
@@ -361,17 +289,6 @@ function s:CJFileTypeInit()
   elseif x == "man"
     set filetype=man
 	endif
-
-  " for i in range(0,len(autoClose)-1,2)
-    " let c1=":inoremap <buffer> " . autoClose[i] . " <C-g>u" . autoClose[i] . autoClose[i+1] . "<left>"
-    " let c2=':inoremap <buffer> <expr>' . autoClose[i+1] . ' getline(".")[col(".")-1] == "' . autoClose[i+1] . '"' . ' ? "<right>" : "' . autoClose[i+1] . '"'
-    " call execute(c1)
-    " call execute(c2)
-  " endfor
-  " for i in range(0,len(autoCloseSolo)-1)
-    " let c1='inoremap <buffer> <expr>' . autoCloseSolo[i] . ' getline(".")[col(".")-1] == "' . autoCloseSolo[i] . '" ? "<right>" : "' . autoCloseSolo[i] .  autoCloseSolo[i] . '<left>"'
-		" call execute(c1)
-  " endfor
 
   let spellCheckTypes = ["md","tex"]
   if index(spellCheckTypes, x) >= 0

@@ -21,3 +21,7 @@ function SMap(mode, lhs, rhs, opts)
   end
   Map(mode, lhs, rhs, opts)
 end
+
+function BufDir()
+  return vim.fs.dirname(vim.api.nvim_buf_get_name(0))
+end
