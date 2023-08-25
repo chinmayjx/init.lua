@@ -490,6 +490,7 @@ augroup CJaucmd
 	autocmd BufNewFile * call s:CJFileTypeInit()
 	autocmd TermOpen * call s:CJTermSetup()
 	autocmd WinEnter * call s:CJWinEnterSetup()
+	autocmd WinNew * call s:CJWinEnterSetup()
 	autocmd CmdwinEnter * call s:CJCmdwinEnterSetup()
 augroup END
 

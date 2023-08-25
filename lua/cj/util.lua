@@ -25,3 +25,9 @@ end
 function BufDir()
   return vim.fs.dirname(vim.api.nvim_buf_get_name(0))
 end
+
+function JoinPath(...)
+  local args = {...}
+  local p = table.concat(args, "/"):gsub("/+", "/")
+  return p
+end

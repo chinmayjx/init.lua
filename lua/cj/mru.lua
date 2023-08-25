@@ -6,7 +6,7 @@ local fileNameLI = function(nm)
   local home = vim.fs.normalize("~")
   nm = string.gsub(nm, home, "~")
   local fn = nm
-  local pt
+  local pt = ""
   for i = #fn, 1, -1 do
     if nm:sub(i, i) == "/" then
       fn = string.sub(nm, i + 1)
@@ -52,7 +52,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
 })
 
 
-local pickBuf = function()
+local showPicker = function()
   local winId = vim.fn.win_getid()
   local buffs = winBuffs[winId]
 
@@ -72,7 +72,11 @@ local pickBuf = function()
     end
     local res, mess = pcall(function()
       bis[i - 1] = vim.fn.getbufinfo(buffs[i])[1]
-      names[i - 1] = fileNameLI(bis[i - 1].name)
+      local nm = bis[i - 1].name
+      if #nm == 0 then
+        nm = buffs[i] .. "/[anon]"
+      end
+      names[i - 1] = fileNameLI(nm)
     end)
     if not res then
       print("pickBuf:err:", buffs[i], mess)
@@ -88,4 +92,10 @@ local pickBuf = function()
   end)
 end
 
-SMap("n", "<enter>", pickBuf)
+SMap("n", "<enter>", showPicker)
+
+return {
+  getWinBuffs = function ()
+    return winBuffs
+  end
+}
