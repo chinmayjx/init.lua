@@ -1,15 +1,9 @@
-
 vim.g.mapleader = " "
 Map("n", "<leader>sa", "gg0vG$")
 
 Map("n", "<leader>y", "\"+y")
 Map("v", "<leader>y", "\"+y")
 Map("n", ",,", ",")
-Map("n", ",ee", function()
-  local cb = vim.api.nvim_buf_get_number(0)
-  vim.cmd("silent bufdo e")
-  vim.api.nvim_win_set_buf(0, cb)
-end)
 Map("n", ",q", ":qa<CR>")
 Map("n", ",d", "*Ncgn")
 Map("n", ",h", ":%s//\\0/g<left><left><left><left><left>")
@@ -58,19 +52,21 @@ Map("n", "<leader>cp", ":cprev<CR>")
 Map("n", "<leader>li", ":lua print(vim.inspect())<left><left>")
 
 Map("n", "<leader>;", ":15sp term://bash | startinsert<CR>")
-Map("n", ",p", function() SelectFromList(vim.fn.CJGetProjects(), vim.fn.CJProjectSelect) end)
--- Map("n", "<enter>", function() SelectFromList(vim.fn.CJBuffs(), vim.fn.CJBuffSelect) end)
 Map("n", "<F4>v", function()
   SelectFromList(vim.fn.CJClipboardItems(), vim.fn.CJpaste)
   vim.cmd.startinsert()
 end)
-Map("n", "<leader>ss", ":SaveSesh<CR>")
+Map("n", "<leader>ss", ":lua SaveSession()<CR>")
 Map("i", "<F4>v", function()
   vim.g.CJIsInsert = 1
   SelectFromList(vim.fn.CJClipboardItems(), vim.fn.CJpaste)
   vim.cmd.startinsert()
 end)
 SMap("n", "<leader>ca", vim.lsp.buf.code_action)
+
+SMap({"n", "v"}, "\\y", "\"+y")
+SMap({"n", "v"}, "\\c", "\"_c")
+SMap({"n", "v"}, "\\d", "\"_d")
 
 vim.cmd [[
   nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'

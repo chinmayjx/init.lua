@@ -1,102 +1,3 @@
-function g:CJIndex(ls,x)
-	let i = 0
-	while i<len(a:ls)
-		if a:ls[i] == a:x
-			return i
-		endif
-		let i = i+1
-	endwhile
-	return -1
-endfunction
-
-function g:CJLastIndex(ls,x)
-	let i = len(a:ls) - 1
-	while i>=0
-		if a:ls[i] == a:x
-			return i
-		endif
-		let i = i-1
-	endwhile
-	return -1
-endfunction
-
-function g:CJFindVimsesh(pth)
-	let p = a:pth 
-	while 1
-		if filereadable(p . "/.sesh.vim")
-			return p
-		endif
-		let li = g:CJLastIndex(p,'/')
-		if li<=0
-			break
-		endif
-		let p = p[:li-1] 
-	endwhile
-	return ""
-endfunction
-
-function g:CJIsWelcomeScreen()
-	return len(filter(range(1, bufnr('$')), 'bufexists(v:val) && !empty(getbufinfo(v:val)[0].name)')) == 0
-endfunction
-
-function g:CJInitializeSession(p)
-  let g:CJWinBuffs = {}
-  let g:CJLoadedSeshName = ''
-  silent exec "source " . a:p . "/.sesh.vim"
-  let tmp = {}
-  for k in keys(g:CJWinBuffs)
-    let tmp[win_getid(k)] = g:CJWinBuffs[k]
-  endfor
-  let g:CJWinBuffs = tmp
-endfunction
-
-function g:CJLoadNearestSesh(prompt=1)
-	if exists('g:CJLoadedSeshName') && !empty(g:CJLoadedSeshName)
-		echoerr "you're already doing sesh in: " . g:CJLoadedSeshName
-		return 
-	endif
-	let p = g:CJFindVimsesh(getcwd())
-	if empty(p)
-		echoerr "no sesh found"
-		return
-	endif
-	if a:prompt == 1
-		call inputsave()	
-		let x = input("load: " . p . " (y/n) ? ", "y")
-		call inputrestore()
-	endif
-	if a:prompt != 1 || x == "y"
-    call g:CJInitializeSession(p)
-	endif
-endfunction
-
-function g:CJSaveVimsesh()
-	if !exists('g:CJLoadedSeshName') || empty(g:CJLoadedSeshName)
-		call inputsave()	
-		let sf = input("dir: ", getcwd())
-		call inputrestore()	
-		if empty(sf)
-			return
-		endif
-		if sf[-1:] == "/"
-			let sf = sf[:-2]
-		endif
-		let g:CJLoadedSeshName = sf
-	else
-		let sf = g:CJLoadedSeshName
-	endif
-	silent exec "!echo " . sf . " >> ~/.vimprojects"
-  :NvimTreeClose
-  " let tmp = {}
-  " for k in keys(g:CJWinBuffs)
-    " let  tmp[win_id2win(k)] = g:CJWinBuffs[k]
-  " endfor
-	silent exec "mks! " . sf . "/.sesh.vim"
-	" silent exec "!echo \"let g:CJWinBuffs = " . escape(string(tmp), "\\") . "\" >> " . sf . "/.sesh.vim"
-	silent exec "!echo \"let g:CJLoadedSeshName = '" . sf . "'\" >> " . sf . "/.sesh.vim"
-endfunction
-
-
 function g:CJtrailingNum(s)
 	let i=len(a:s)-1
 	let n=0
@@ -118,19 +19,7 @@ endfunction
 nnoremap <Leader>ne :enew<CR>
 nnoremap <Leader>nn :call g:CJnextFileNo()<CR>
 
-command! -nargs=? LoadSesh call g:CJLoadNearestSesh(<f-args>)
-command! SaveSesh call g:CJSaveVimsesh()
-
-
 runtime ftplugin/man.vim
-nnoremap <Leader>= <C-w>=
-nnoremap <Leader>y "+y
-vnoremap <Leader>y "+y
-nnoremap <Leader>p "0p
-nnoremap <Leader>P "0P
-nnoremap <Leader>oh :vert help 
-nnoremap <Leader>om :vert Man 
-nnoremap <Leader><F4> :call g:CJSaveVimsesh() \| qa<CR>
 command! -nargs=1 EditReg call feedkeys(":let @" . <f-args> . "='" . execute("echo @" . <f-args> )[1:] . "'")
 nnoremap <Leader>@ :EditReg 
 
@@ -237,9 +126,6 @@ nnoremap <silent> <Leader>tm :call <SID>loadTemplate()<CR>
 
 let $BASH_ENV = '~/github/configs/bash.bash'
 
-" inoremap <expr>" ("<C-g>u" . (getline(".")[col(".")-1] == "\"" ? "<right>" : "\"\"<left>"))
-" inoremap <expr>' ("<C-g>u" . (getline(".")[col(".")-1] == "'" ? "<right>" : (match(getline(".")[col(".")-2], '\w') >= 0 ? "'" : "''<left>")))
-
 inoremap <space> <C-g>u<space>
 let undoBreakers = split(",.=+-*/:_#@",'\zs')
 for ub in undoBreakers
@@ -300,134 +186,6 @@ endfunction
 nnoremap <silent><expr> ,/ match(getline("."),"^\\s*" . b:CJCommentChar) == -1 ? ':exec "s/^\\(\\s*\\)/\\1" . b:CJCommentChar . " /" \| noh<CR>j' : ':exec "s/^\\(\\s*\\)" . b:CJCommentChar . " /\\1/" \| noh<CR>'
 vnoremap <silent><expr> ,/ match(getline("."),"^\\s*" . b:CJCommentChar) == -1 ? '<esc>:exec "'."'".'<,'."'".'>s/^\\(\\s*\\)/\\1" . b:CJCommentChar . " /" \| noh<CR>' : '<esc>:exec "'."'".'<,'."'".'>s/^\\(\\s*\\)" . b:CJCommentChar . " /\\1/" \| noh<CR>'
 
-function g:CJOptimizeProjectHistoryFile()
-	let ls = readfile(expand('~/.vimprojects'))
-	echom ls
-endfunction
-
-function g:CJGetProjects()
-	let ls = reverse(readfile(expand('~/.vimprojects')))
-	let tmp = {}
-	let fil = []
-	for p in ls
-		if !has_key(tmp, p)
-			let tmp[p] = 1
-			call add(fil, p)
-		endif
-	endfor
-	call writefile(reverse(fil), expand('~/.vimprojects'))
-	call reverse(fil)
-	for i in range(len(fil))
-		let tail = ""
-		let j=len(fil[i])-1
-		while j>=0 && fil[i][j]!='/'
-			let tail = fil[i][j] . tail
-			let j=j-1
-		endwhile
-		let fil[i] = tail . "::" . fil[i][:j]
-	endfor
-	return fil
-endfunction
- 
-function g:CJProjectSelect(p)
-	let sel = a:p
-	let i = g:CJIndex(sel, ':')
-	let sel = sel[i+2:] . sel[:i-1]
-	if g:CJIsWelcomeScreen() != 1
-		if len(filter(range(1, bufnr('$')), 'bufexists(v:val) && getbufinfo(v:val)[0].changed')) > 0
-			echoerr "save all buffers first"
-			return 
-		endif
-		if !exists('g:CJLoadedSeshName') || empty(g:CJLoadedSeshName)
-			call inputsave()	
-			let x = input("project won't be saved, continue? (y/n/s): ", "y")
-			call inputrestore()	
-			if x == "s"
-				call g:CJSaveVimsesh()
-			elseif x != "y"
-				return
-			endif
-		else
-			call g:CJSaveVimsesh()
-		endif
-	endif
-	silent bufdo bw!
-  call feedkeys(':call g:CJInitializeSession("' . sel . "\")\<CR>")
-endfunction
-
-" if !exists("g:CJWinBuffs")
-	" let g:CJWinBuffs = {}
-" endif
-
-" function g:CJAllBuffNames()
-	" let bf = []
-	" for bid in filter(range(1, bufnr('$')), 'bufexists(v:val) && buflisted(v:val)')
-		" let nm=bufname(bid)
-		" if empty(nm)
-			" let nm=bid
-		" endif
-		" call add(bf, nm)
-	" endfor
-	" return bf
-" endfunction
-
-" function g:CJUpdateWinBuffs()
-	" if win_gettype() == "popup"
-		" return
-	" endif
-	" let win_id = win_getid() 
-	" let buf_id = winbufnr(win_getid())
-	" let buf_nm = bufname(buf_id)
-	" if empty(buf_nm)
-		" let buf_nm=buf_id
-	" endif
-	" if has_key(g:CJWinBuffs, win_id) == 0
-		" let g:CJWinBuffs[win_id] = []
-	" endif
-	" if len(g:CJWinBuffs[win_id]) > 0 && g:CJWinBuffs[win_id][0] == buf_nm
-		" return
-	" endif
-	" call insert(g:CJWinBuffs[win_id], buf_nm, 0)
-" endfunction
-" 
-" function g:CJBuffSelect(arg)
-	" let arc = a:arg
-	" let i = g:CJIndex(arc, ':')
-	" if i>0
-		" let arc = arc[i+2:] . arc[:i-1]
-	" endif
-	" execute("b " . arc)
-" endfunction
-" 
-" function g:CJBuffs()
-	" let win_id = win_getid()
-	" let tmp = {}
-	" let fil = []
-	" if !has_key(g:CJWinBuffs, win_id)
-		" let g:CJWinBuffs[win_id] = []
-	" endif
-	" call extend(g:CJWinBuffs[win_id], g:CJAllBuffNames())
-	" for buf in g:CJWinBuffs[win_id]
-		" let bid = bufnr(buf)
-		" if !has_key(tmp, bid)
-			" call add(fil, buf)
-			" let tmp[bid] = 1
-		" endif
-	" endfor
-	" let g:CJWinBuffs[win_id] = deepcopy(fil)
-	" for i in range(len(fil))
-		" let tail = ""
-		" let j=len(fil[i])-1
-		" while j>=0 && fil[i][j]!='/'
-			" let tail = fil[i][j] . tail
-			" let j=j-1
-		" endwhile
-		" let fil[i] = tail . (j > 0 ? "::" . fil[i][:j] : "")
-	" endfor
-  " return fil[1:]
-	" " call fzf#run({'source': fil, 'sink': function('g:CJBuffSelect'), 'options': "--header-lines 1 ", 'window': {'relative': 1, 'width': 0.8, 'height': 0.4, 'xoffset': 0.5, 'yoffset': 0}})
-" endfunction
-
 let g:CJIsInsert = 1
 function g:CJpaste(s)
   let @y=a:s
@@ -477,15 +235,8 @@ function s:CJCmdwinEnterSetup()
 	map <buffer> <F5> <CR>q:
 endfunction
 
-function s:saveAction()
-	let x=expand('%:e')
-endfunction
-
 augroup CJaucmd
 	autocmd!
-	autocmd BufWrite * call s:saveAction()
-	" autocmd BufEnter * call g:CJUpdateWinBuffs()
-	" autocmd WinEnter * call g:CJUpdateWinBuffs()
 	autocmd BufReadPre * call s:CJFileTypeInit()
 	autocmd BufNewFile * call s:CJFileTypeInit()
 	autocmd TermOpen * call s:CJTermSetup()
@@ -493,4 +244,3 @@ augroup CJaucmd
 	autocmd WinNew * call s:CJWinEnterSetup()
 	autocmd CmdwinEnter * call s:CJCmdwinEnterSetup()
 augroup END
-

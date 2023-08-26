@@ -25,3 +25,4 @@ vim.opt.mouse = "a"
 vim.opt.ww = "<,>,[,],b,s"
 vim.opt.wildignore = "*/node_modules/*,*/__pycache__/*"
 
+vim.opt.guicursor = "n-v-c-ci-cr-sm:block,i-ve:ver25,r-o:hor20"

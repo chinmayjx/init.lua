@@ -53,6 +53,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
 
 
 local showPicker = function()
+  print("pf:", vim.inspect(winBuffs))
   local winId = vim.fn.win_getid()
   local buffs = winBuffs[winId]
 
@@ -95,7 +96,11 @@ end
 SMap("n", "<enter>", showPicker)
 
 return {
-  getWinBuffs = function ()
+  getWinBuffs = function()
     return winBuffs
-  end
+  end,
+  setWinBuffs = function(x)
+    winBuffs = x
+  end,
+  fileNameLI = fileNameLI
 }

@@ -9,10 +9,15 @@ local python_snips = {
   parse("fr", "for ${1:i} in range($2):\n\t${3:pass}\n$0")
 }
 
+local lua_snips = {
+  parse("vi", "vim.inspect($1)$0")
+}
+
 local snips = {
   python = python_snips,
   javascript = js_root,
   typescript = js_root,
+  lua = lua_snips,
 }
 
 for k, v in pairs(snips) do
