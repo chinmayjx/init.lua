@@ -42,7 +42,6 @@ local updateWinBuffs = function(opts)
     end
   end
   winBuffs[winId] = newBuffs
-  -- print(vim.inspect(winBuffs[winId]))
 end
 
 vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
@@ -51,9 +50,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
   callback = updateWinBuffs
 })
 
-
 local showPicker = function()
-  print("pf:", vim.inspect(winBuffs))
   local winId = vim.fn.win_getid()
   local buffs = winBuffs[winId]
 

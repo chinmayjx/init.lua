@@ -19,7 +19,7 @@ local runInDirectory = function(cmd, dir)
 end
 
 local runPython = function()
-  local bd = vim.fn.expand("%:r")
+  local bd = vim.fn.expand("%:p:r")
   local root = vim.fs.find({ "pyrightconfig.json", { start = bd, upward = true } })
   if #root > 0 then
     local rd = vim.fs.dirname(root[1])

@@ -11,6 +11,10 @@ local ignore_dirs = {
   '.venv',
   '.git',
   'dist',
+  'target',
+  '.cjvim',
+  '__pycache__',
+  '__mocks__',
 }
 local ignore_files = {
   '.sesh.vim'
@@ -43,7 +47,12 @@ Map('n', '<leader>ts', function()
   builtin.live_grep({})
 end)
 Map('n', '<leader>tS', function()
-  builtin.live_grep({grep_open_files = false})
+  builtin.live_grep({
+    grep_open_files = false,
+    additional_args = {
+      "--follow",
+    }
+  })
 end)
 Map('n', '<leader>tt', builtin.builtin)
 Map('n', '<leader>tb', builtin.buffers)
