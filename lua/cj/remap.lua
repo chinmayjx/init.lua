@@ -64,9 +64,19 @@ Map("i", "<F4>v", function()
 end)
 SMap("n", "<leader>ca", vim.lsp.buf.code_action)
 
-SMap({"n", "v"}, "\\y", "\"+y")
-SMap({"n", "v"}, "\\c", "\"_c")
-SMap({"n", "v"}, "\\d", "\"_d")
+SMap({ "n", "v" }, "\\y", "\"+y")
+SMap({ "n", "v" }, "\\c", "\"_c")
+SMap({ "n", "v" }, "\\d", "\"_d")
+SMap("n", "\\x", function()
+  local cb = vim.fn.winbufnr(0)
+  local bi = vim.fn.getbufinfo(cb)[1]
+  if bi.changed ~= 0 then
+    vim.notify("unsaved changes")
+    return
+  end
+  vim.cmd("b #")
+  vim.cmd("bw " .. cb)
+end)
 
 vim.cmd [[
   nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'

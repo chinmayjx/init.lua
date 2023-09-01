@@ -70,7 +70,7 @@ function s:deleteCurrentBuffer()
   exec 'bd' . b
   call win_gotoid(cw)
 endfunction
-nnoremap <Leader>x :call <SID>deleteCurrentBuffer()<CR>
+" nnoremap <Leader>x :call <SID>deleteCurrentBuffer()<CR>
 
 nnoremap <M-h> <C-w><left>
 nnoremap <M-l> <C-w><right>

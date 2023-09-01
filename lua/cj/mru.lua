@@ -85,6 +85,7 @@ local showPicker = function()
       i = i - 1
     end
   end
+  print(vim.inspect(names))
   SelectFromList(names, function(arg)
     vim.cmd("b " .. buffs[arg.index + 1])
   end)

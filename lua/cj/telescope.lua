@@ -42,7 +42,9 @@ end
 Map('n', '<C-p>', function() builtin.find_files({ find_command = cmd }) end)
 Map('n', '<C-M-p>', function() builtin.find_files({ hidden = true, no_ignore = true, no_ignore_parent = true }) end)
 Map('n', '<M-p>', builtin.git_files)
-Map('n', '<leader>t/', ":silent! lua require'telescope.builtin'.current_buffer_fuzzy_find()<CR>", { silent = true })
+Map('n', '<leader>t/', function()
+  builtin.current_buffer_fuzzy_find({ previewer = false })
+end)
 Map('n', '<leader>ts', function()
   builtin.live_grep({})
 end)
@@ -56,7 +58,7 @@ Map('n', '<leader>tS', function()
 end)
 Map('n', '<leader>tt', builtin.builtin)
 Map('n', '<leader>tb', builtin.buffers)
-Map('n', '<leader>tr', builtin.resume)
+Map('n', '<leader>tr', builtin.pickers)
 Map('n', '<leader>tg', builtin.git_status)
 Map('n', '<leader>tv', builtin.lsp_document_symbols)
 Map('n', '<leader>tV', builtin.treesitter)
@@ -73,6 +75,8 @@ require("telescope").setup({
       i = {
         ["<esc>"] = actions.close,
         ["<c-t>"] = trouble.open_with_trouble,
+        ["<C-Down>"] = actions.cycle_history_next,
+        ["<C-Up>"] = actions.cycle_history_prev,
       },
       n = {
         ["<c-t>"] = trouble.open_with_trouble,
@@ -80,6 +84,10 @@ require("telescope").setup({
     },
     layout_config = {
       scroll_speed = 3
+    },
+    cache_picker = {
+      num_pickers = 10,
+      limit_entries = 100,
     }
   },
 })
@@ -88,7 +96,11 @@ local conf = require("telescope.config").values
 
 function SelectFromList(list, action)
   local p_window = require('telescope.pickers.window')
-  local opts = themes.get_dropdown { layout_strategy = "center", layout_config = { width = 0.5, anchor = "N" } }
+  local opts = themes.get_dropdown({
+    layout_strategy = "center",
+    layout_config = { width = 0.5, anchor = "N" },
+    cache_picker = false
+  })
   pickers.new(opts, {
     prompt_title = "title",
     finder = finders.new_table {
