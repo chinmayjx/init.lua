@@ -1,10 +1,12 @@
+local telescope = require("telescope")
 local builtin = require('telescope.builtin')
-local pickers = require "telescope.pickers"
-local finders = require "telescope.finders"
-local themes = require "telescope.themes"
-local actions = require "telescope.actions"
-local action_state = require "telescope.actions.state"
+local pickers = require("telescope.pickers")
+local finders = require("telescope.finders")
+local themes = require("telescope.themes")
+local actions = require("telescope.actions")
+local action_state = require("telescope.actions.state")
 local trouble = require("trouble.providers.telescope")
+local conf = require("telescope.config").values
 
 local ignore_dirs = {
   'node_modules',
@@ -39,6 +41,18 @@ for i = 1, #ignore_files do
   table.insert(cmd, "-g")
   table.insert(cmd, "!" .. ignore_files[i])
 end
+
+local liveGrep = function(opts)
+  local dopts = {
+    grep_open_files = false,
+    additional_args = {
+      "--follow",
+    }
+  }
+  dopts = vim.tbl_extend("force", dopts, opts)
+  builtin.live_grep(dopts)
+end
+
 Map('n', '<C-p>', function() builtin.find_files({ find_command = cmd }) end)
 Map('n', '<C-M-p>', function() builtin.find_files({ hidden = true, no_ignore = true, no_ignore_parent = true }) end)
 Map('n', '<M-p>', builtin.git_files)
@@ -48,14 +62,7 @@ end)
 Map('n', '<leader>ts', function()
   builtin.live_grep({})
 end)
-Map('n', '<leader>tS', function()
-  builtin.live_grep({
-    grep_open_files = false,
-    additional_args = {
-      "--follow",
-    }
-  })
-end)
+Map('n', '<leader>tS', liveGrep)
 Map('n', '<leader>tt', builtin.builtin)
 Map('n', '<leader>tb', builtin.buffers)
 Map('n', '<leader>tr', builtin.pickers)
@@ -69,7 +76,7 @@ Map('n', '<leader>tp', builtin.commands)
 Map('n', '<leader>to', builtin.oldfiles)
 Map('n', '<leader>th', builtin.help_tags)
 
-require("telescope").setup({
+telescope.setup({
   defaults = {
     mappings = {
       i = {
@@ -92,7 +99,6 @@ require("telescope").setup({
   },
 })
 
-local conf = require("telescope.config").values
 
 function SelectFromList(list, action)
   local p_window = require('telescope.pickers.window')
@@ -118,3 +124,40 @@ function SelectFromList(list, action)
 
   }):find()
 end
+
+local function cmdSearch()
+  local cfg = {
+    cmd = "rg --follow --files"
+  }
+  -- local getFinder = function ()
+  --
+  -- end
+  local showP
+  showP = function()
+    local opts = {
+      finder = finders.new_oneshot_job({ "bash", "-c", cfg.cmd }, {}),
+      sorter = conf.generic_sorter(),
+      layout_strategy = "horizontal",
+      -- layout_config = { width = 0.9, height = 0.9, anchor = "S" },
+      cache_picker = false
+    }
+    pickers.new(opts, {
+      prompt_title = cfg.cmd,
+      attach_mappings = function(prompt_bufnr, map)
+        map("i", "<C-e>", function()
+          vim.ui.input({ prompt = "EditCMD: ", default = cfg.cmd, completion = "command" }, function(val)
+            cfg.cmd = val
+            showP()
+          end)
+        end)
+        return true
+      end
+    }):find()
+  end
+  showP()
+end
+-- cmdSearch()
+
+return {
+  liveGrep = liveGrep
+}
