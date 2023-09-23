@@ -2,6 +2,7 @@ local telescope = require("telescope")
 local builtin = require('telescope.builtin')
 local pickers = require("telescope.pickers")
 local finders = require("telescope.finders")
+local sorters = require("telescope.sorters")
 local themes = require("telescope.themes")
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
@@ -43,6 +44,7 @@ for i = 1, #ignore_files do
 end
 
 local liveGrep = function(opts)
+  opts = opts or {}
   local dopts = {
     grep_open_files = false,
     additional_args = {
@@ -125,13 +127,10 @@ function SelectFromList(list, action)
   }):find()
 end
 
-local function cmdSearch()
+local function cmdSearchX()
   local cfg = {
     cmd = "rg --follow --files"
   }
-  -- local getFinder = function ()
-  --
-  -- end
   local showP
   showP = function()
     local opts = {
@@ -156,6 +155,30 @@ local function cmdSearch()
   end
   showP()
 end
+
+local function cmdSearch()
+  local opts = {
+    finder = finders.new_job(function(prompt)
+      local c = {
+        "bash",
+        "-c",
+        prompt
+      }
+      return c
+    end),
+    sorter = sorters.highlighter_only(),
+    layout_strategy = "horizontal",
+    -- layout_config = { width = 0.9, height = 0.9, anchor = "S" },
+    cache_picker = false
+  }
+  pickers.new(opts, {
+    prompt_title = "abcd",
+    attach_mappings = function(prompt_bufnr, map)
+      return true
+    end
+  }):find()
+end
+
 -- cmdSearch()
 
 return {
