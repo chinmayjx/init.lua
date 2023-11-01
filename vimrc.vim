@@ -51,8 +51,6 @@ inoremap <M-u> <C-o>u
 inoremap <Home> <C-o>^
 inoremap <C-s> <C-o>:w<CR>
 nnoremap <C-s> :w<CR>
-nnoremap <C-S-right> :bn<CR>
-nnoremap <C-S-left> :bp<CR>
 nnoremap ,x :bd<CR>
 
 function s:deleteCurrentBuffer()

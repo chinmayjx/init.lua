@@ -62,19 +62,19 @@ local showPicker = function()
     return redirect()
   end
 
-  local bis = {}
   local names = {}
-  for i = 2, #buffs do
+  local i = 2
+  while i <= #buffs do
     if not buffs[i] then
       break
     end
     local res, mess = pcall(function()
-      bis[i - 1] = vim.fn.getbufinfo(buffs[i])[1]
-      local nm = bis[i - 1].name
+      local bufInfo = vim.fn.getbufinfo(buffs[i])[1]
+      local nm = bufInfo.name
       if #nm == 0 then
         nm = buffs[i] .. "/[anon]"
       end
-      names[i - 1] = fileNameLI(nm)
+      table.insert(names, fileNameLI(nm))
     end)
     if not res then
       print("pickBuf:err:", buffs[i], mess)
@@ -84,8 +84,8 @@ local showPicker = function()
       end
       i = i - 1
     end
+    i = i + 1
   end
-  print(vim.inspect(names))
   SelectFromList(names, function(arg)
     vim.cmd("b " .. buffs[arg.index + 1])
   end)
