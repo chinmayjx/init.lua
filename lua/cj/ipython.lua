@@ -50,6 +50,8 @@ function OpenIpythonWindow(opts)
   local save_dir = vim.fn.getcwd()
   if opts.wd then
     vim.cmd.cd(opts.wd)
+  elseif vim.fn.isdirectory("src") == 1 then
+    vim.cmd.cd("src")
   end
   vim.cmd(sp .. " term://ipython --no-autoindent --TerminalInteractiveShell.editing_mode=emacs --profile=''")
   vim.cmd.cd(save_dir)

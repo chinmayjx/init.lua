@@ -25,7 +25,12 @@ local runPython = function()
     local rd = vim.fs.dirname(root[1])
     local fp = string.sub(bd, #rd + 2)
     local mn = string.gsub(fp, "/", ".")
-    runInDirectory("python3 -m " .. mn, rd)
+    if mn:sub(1, 4) == "src." then
+      mn = mn:sub(5)
+      runInDirectory("python3 -m " .. mn, rd .. "/src")
+    else
+      runInDirectory("python3 -m " .. mn, rd)
+    end
     return true
   end
 end
