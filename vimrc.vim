@@ -74,8 +74,6 @@ nnoremap <M-h> <C-w><left>
 nnoremap <M-l> <C-w><right>
 nnoremap <M-j> <C-w><down>
 nnoremap <M-k> <C-w><up>
-nnoremap <M-S-j> :sp<CR>
-nnoremap <M-S-l> :vs<CR>
 
 tnoremap <M-e> <C-\><C-n>
 tnoremap <M-k> <C-\><C-n><C-w><up>
