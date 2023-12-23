@@ -75,3 +75,6 @@ SMap("n", "\\x", function()
   vim.cmd("b #")
   vim.cmd("bw " .. cb)
 end)
+
+SMap("n", "<M-[>0#01", vim.cmd.tabnext)
+SMap("n", "<M-[>0#02", vim.cmd.tabprev)

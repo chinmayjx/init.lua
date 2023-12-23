@@ -65,8 +65,8 @@ local function toggleTerm()
   end
  end
 
-SMap("t", "<M-c>j1", toggleTerm)
-SMap("n", "<M-c>j1", toggleTerm)
+SMap("t", "<M-[>0#00", toggleTerm)
+SMap("n", "<M-[>0#00", toggleTerm)
 SMap("n", ",kk", closeUselessBuffers)
 SMap("n", "\\ne", vim.cmd.enew)
 SMap("n", "\\nn", nextFileNo)
