@@ -22,7 +22,7 @@ local updateWinBuffs = function(opts)
     return
   end
   local winId = vim.fn.win_getid()
-  local bufId = vim.fn.winbufnr(vim.fn.win_getid())
+  local bufId = vim.fn.winbufnr(winId)
   if not winBuffs[winId] then
     winBuffs[winId] = {}
   end

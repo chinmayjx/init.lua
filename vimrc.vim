@@ -39,65 +39,24 @@ nnoremap t<F5> <C-w>T
 nnoremap <F4>c :tabnew<CR>
 nnoremap <F4>x :tabc<CR>
 
-
-vnoremap <Leader>( "sdi(<C-r>s)
-vnoremap <Leader>[ "sdi[<C-r>s]
-vnoremap <Leader>{ "sdi{<C-r>s}
-
 inoremap <C-Del> <C-o>dw
 inoremap <C-h> <C-w>
-inoremap <C-v> <C-r>"
 inoremap <M-u> <C-o>u
 inoremap <Home> <C-o>^
 inoremap <C-s> <C-o>:w<CR>
 nnoremap <C-s> :w<CR>
 nnoremap ,x :bd<CR>
 
-function s:deleteCurrentBuffer()
-  let b=winbufnr(0)
-  let cw=win_getid()
-  if getbufinfo(b)[0].changed
-    echom 'unsaved changes'
-    return
-  endif
-  let wins = win_findbuf(b)
-  for w in wins
-    call win_gotoid(w)
-    bp
-  endfor
-  exec 'bd' . b
-  call win_gotoid(cw)
-endfunction
-" nnoremap <Leader>x :call <SID>deleteCurrentBuffer()<CR>
-
-nnoremap <M-h> <C-w><left>
-nnoremap <M-l> <C-w><right>
-nnoremap <M-j> <C-w><down>
-nnoremap <M-k> <C-w><up>
+nnoremap <M-left> <C-w><left>
+nnoremap <M-right> <C-w><right>
+nnoremap <M-down> <C-w><down>
+nnoremap <M-up> <C-w><up>
 
 tnoremap <M-e> <C-\><C-n>
 tnoremap <M-k> <C-\><C-n><C-w><up>
 tnoremap <M-j> <C-\><C-n><C-w><down>
 tnoremap <M-h> <C-\><C-n><C-w><left>
 tnoremap <M-l> <C-\><C-n><C-w><right>
-
-
-
-set expandtab
-set number relativenumber
-set mouse=a
-set tabstop=2
-set shiftwidth=2
-set termguicolors
-set splitbelow
-set splitright
-set notimeout
-set ww=<,>,[,],b,s
-
-set foldmethod=indent
-set foldnestmax=10
-set nofoldenable
-set wildignore=*/node_modules/*,*/__pycache__/*
 
 nnoremap <Leader>`n :e ~/.config/nvim/init.lua<CR>
 nnoremap <Leader>`s :w \| source ~/.config/nvim/init.lua<CR>

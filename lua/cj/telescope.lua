@@ -28,7 +28,6 @@ local cmd = {
   "--files",
   "--follow",
   "--hidden",
-  "--no-ignore-dot",
   "--no-ignore-exclude",
   "--no-ignore-global",
   "--no-ignore-vcs",

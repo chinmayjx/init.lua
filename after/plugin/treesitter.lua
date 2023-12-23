@@ -31,14 +31,10 @@ require 'nvim-treesitter.configs'.setup {
     enable = true,
     keymaps = {
       init_selection = "<leader>v",
-      node_incremental = "]",
-      scope_incremental = "+",
-      node_decremental = "[",
+      node_incremental = "<M-]>",
+      scope_incremental = "<M-}>",
+      node_decremental = "<M-[>",
     },
   },
 }
 
-vim.cmd[[
-  set foldmethod=expr
-  set foldexpr=nvim_treesitter#foldexpr()
-]]

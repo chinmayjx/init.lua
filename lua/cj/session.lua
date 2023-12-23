@@ -26,12 +26,12 @@ local function pickProject()
     end)
   end
 end
--- pickProject()
+
 local function saveProjectToHistory(root)
   local f = io.open(PROJECT_HISTORY, "r")
+  local st = { [root] = true }
+  local nl = { root }
   if f ~= nil then
-    local st = { [root] = true }
-    local nl = { root }
     for line in f:lines() do
       if #line > 0 and st[line] == nil then
         table.insert(nl, line)
@@ -42,11 +42,11 @@ local function saveProjectToHistory(root)
       end
     end
     f:close()
-    f = io.open(PROJECT_HISTORY, "w")
-    if f ~= nil then
-      f:write(table.concat(nl, "\n"))
-      f:close()
-    end
+  end
+  f = io.open(PROJECT_HISTORY, "w")
+  if f ~= nil then
+    f:write(table.concat(nl, "\n"))
+    f:close()
   end
 end
 

@@ -9,7 +9,8 @@ vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 vim.opt.autoread = true
 
--- vim.opt.smartindent = true
+vim.opt.autoindent = true
+vim.opt.smartindent = true
 
 vim.opt.incsearch = true
 vim.opt.termguicolors = true
@@ -26,3 +27,8 @@ vim.opt.ww = "<,>,[,],b,s"
 vim.opt.wildignore = "*/node_modules/*,*/__pycache__/*"
 
 vim.opt.guicursor = "n-v-c-ci-cr-sm:block,i-ve:ver25,r-o:hor20"
+
+vim.o.foldmethod = "expr"
+vim.o.foldexpr = "nvim_treesitter#foldexpr()"
+vim.o.foldnestmax="10"
+vim.o.nofoldenable=true
