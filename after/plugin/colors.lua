@@ -25,4 +25,5 @@ function TransparentTheme(opts)
   end
 end
 
-TransparentTheme({ module = "nightfox", theme = "nordfox" })
+-- TransparentTheme({ module = "nightfox", theme = "nordfox" })
+TransparentTheme({ module = "catppuccin", theme = "catppuccin-frappe" })

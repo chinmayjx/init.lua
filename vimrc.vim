@@ -77,7 +77,6 @@ endfunction
 function s:CJFileTypeInit()
 	let x = expand('%:e')
   if x == "md"
-    call s:checkboxSetup()
     inoremap <buffer><M-i> **<left>
     inoremap <buffer><F4>3 ###<space>
     inoremap <buffer><F4>4 ####<space>
