@@ -42,8 +42,8 @@ nnoremap <Leader>`s :w \| source ~/.config/nvim/init.lua<CR>
 nnoremap <Leader>`t :e ~/.config/nvim/snippets/
 
 " store n{j,k} in jumplist
-nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
-nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
+nnoremap <silent><expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
+nnoremap <silent><expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
 
 function s:copyFromFile(fnm)
   silent exec ":silent w | silent !cp " . a:fnm . " %"

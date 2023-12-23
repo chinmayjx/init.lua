@@ -3,6 +3,7 @@ vim.opt.relativenumber = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
+vim.opt.breakindent = true
 vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
 vim.opt.shiftwidth = 2
@@ -17,6 +18,7 @@ vim.opt.termguicolors = true
 
 vim.opt.scrolloff = 4
 vim.opt.signcolumn = "yes"
+vim.o.completeopt = 'menuone,noselect'
 
 vim.opt.splitbelow = true
 vim.opt.splitright = true

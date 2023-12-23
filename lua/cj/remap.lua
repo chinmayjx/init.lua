@@ -21,8 +21,8 @@ SMap("n", "<F4>x", ":tabc<CR>")
 
 SMap("i", "<M-up>", "<C-o>gk")
 SMap("i", "<M-down>", "<C-o>gj")
-SMap("n", "<up>", "gk")
-SMap("n", "<down>", "gj")
+SMap("n", "<up>", "v:count == 0 ? 'gk' : 'k'", {expr = true})
+SMap("n", "<down>", "v:count == 0 ? 'gj' : 'j'", {expr = true})
 
 SMap({"n", "i"}, "<M-S-j>", function() vim.cmd.m("+1") end, {desc = "move line up"})
 SMap({"n", "i"}, "<M-S-k>", function() vim.cmd.m("-2") end, {desc = "move line down"})

@@ -26,12 +26,24 @@ end
 
 local function closeUselessBuffers()
   local last = vim.fn.bufnr("$")
+  local prefixes = {"gitsigns:"}
   for i = 1, last do
     if vim.fn.bufexists(i) == 1 then
       local bInfo = vim.fn.getbufinfo(i)[1]
+      local bName = bInfo.name
       local isFTerm = bInfo.variables.term_title ~= nil and bInfo.variables.cj_protected == nil
       local emptyUntouched = bInfo.name == "" and bInfo.changed == 0
-      if isFTerm or emptyUntouched then
+      local ignorePrefix = false
+
+      for _, p in pairs(prefixes) do
+        local l = string.len(p)
+        if bName:sub(1,l) == p then
+          ignorePrefix = true
+          break
+        end
+      end
+
+      if isFTerm or emptyUntouched or ignorePrefix then
         vim.cmd("silent! bd! " .. i)
       end
     end

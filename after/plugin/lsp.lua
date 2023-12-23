@@ -53,7 +53,7 @@ local nvimLuaLS = function(opts)
   local runtime_path = vim.split(package.path, ';')
   table.insert(runtime_path, 'lua/?.lua')
   table.insert(runtime_path, 'lua/?/init.lua')
-  local root = "/home/chinmay/.local/share/nvim/site/pack/packer/start/"
+  local root = vim.fs.normalize("~/.local/share/nvim/site/pack/packer/start/")
   local lib_paths = {
     vim.fn.expand('$VIMRUNTIME/lua'),
     vim.fn.stdpath('config') .. '/lua',
