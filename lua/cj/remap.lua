@@ -5,6 +5,8 @@ SMap("n", "<leader>y", "\"+y")
 SMap("v", "<leader>y", "\"+y")
 SMap("n", ",,", ",")
 SMap("n", ",q", ":qa<CR>")
+
+-- Find & Replace
 SMap("n", ",d", "*Ncgn")
 SMap("n", ",h", ":%s//\\0/g<left><left><left><left><left>")
 SMap("v", ",l", ":s//\\0/g<left><left><left><left><left>")
@@ -12,21 +14,19 @@ SMap("v", ",h", "\"hy:let @h=escape(@h,'\\/')<CR>:%s/\\M<C-r>h/\\0/g<left><left>
 SMap("v", ",D", "\"sy:let @/='\\V'.escape(@s, '\\')<CR>cgn")
 SMap("v", "<leader>d", "y`]p")
 
-SMap("n", "t<F4>", "gT")
-SMap("n", "t<F5>", "<C-w>T")
+-- Tab Management
+SMap("n", "<F4><F4>", "gT")
 SMap("n", "<F4>c", ":tabnew<CR>")
 SMap("n", "<F4>x", ":tabc<CR>")
 
-SMap("i", "<M-up>", "<C-o>gk", { silent = true })
-SMap("i", "<M-down>", "<C-o>gj", { silent = true })
+SMap("i", "<M-up>", "<C-o>gk")
+SMap("i", "<M-down>", "<C-o>gj")
 SMap("n", "<up>", "gk")
 SMap("n", "<down>", "gj")
 
-SMap("n", "<M-S-j>", function() vim.cmd.m("+1") end)
-SMap("i", "<M-S-j>", "<Esc>:m .+1<CR>i")
+SMap({"n", "i"}, "<M-S-j>", function() vim.cmd.m("+1") end, {desc = "move line up"})
+SMap({"n", "i"}, "<M-S-k>", function() vim.cmd.m("-2") end, {desc = "move line down"})
 SMap("v", "<M-S-j>", ":m '>+1<CR>gv")
-SMap("n", "<M-S-k>", function() vim.cmd.m("-2") end)
-SMap("i", "<M-S-k>", "<Esc>:m .-2<CR>i")
 SMap("v", "<M-S-k>", ":m '<-2<CR>gv")
 
 SMap("v", "<leader>(", "\"sdi(<C-r>s)")
@@ -50,7 +50,6 @@ SMap("n", "<leader>cp", ":cprev<CR>")
 SMap("n", "<leader>li", ":lua print(vim.inspect())<left><left>")
 SMap("n", "<leader>nw", ":setl nowrap<CR>")
 
-SMap("n", "<leader>;", ":15sp term://bash | startinsert<CR>")
 SMap("n", "<F4>v", function()
   SelectFromList(vim.fn.CJClipboardItems(), vim.fn.CJpaste)
   vim.cmd.startinsert()
@@ -76,8 +75,3 @@ SMap("n", "\\x", function()
   vim.cmd("b #")
   vim.cmd("bw " .. cb)
 end)
-
-vim.cmd [[
-  nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
-  nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
-]]

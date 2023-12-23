@@ -91,7 +91,25 @@ local showPicker = function()
   end)
 end
 
-SMap("n", "<enter>", showPicker)
+SMap("n", "<CR>", function()
+  local winType = vim.fn.win_gettype()
+  local ignored = { "loclist", "quickfix", "command" }
+  local doit = function ()
+      Feedkeys(ReplaceTermcodes("<CR>"))
+  end
+  for _, t in pairs(ignored) do
+    if t == winType then
+      doit()
+      return
+    end
+  end
+  local bInfo = vim.fn.getbufinfo(vim.fn.winbufnr(0))[1]
+  if bInfo.variables.term_title then
+    doit()
+    return
+  end
+  showPicker()
+end)
 
 return {
   getWinBuffs = function()

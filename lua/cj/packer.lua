@@ -5,10 +5,6 @@ return require('packer').startup(function(use)
   use 'nvim-lua/plenary.nvim'
   use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
   use {
-    "windwp/nvim-autopairs",
-    config = function() require("nvim-autopairs").setup {} end
-  }
-  use {
     "folke/trouble.nvim",
     requires = "nvim-tree/nvim-web-devicons",
   }
@@ -19,6 +15,11 @@ return require('packer').startup(function(use)
     run = ":MasonUpdate"
   }
   use { 'williamboman/mason-lspconfig.nvim' }
+  -- editing
+  use "windwp/nvim-autopairs"
+  use "nvim-treesitter/nvim-treesitter-context"
+  use 'numToStr/Comment.nvim'
+
   -- nvim-cmp
   use { 'hrsh7th/nvim-cmp' }
   use { 'hrsh7th/cmp-nvim-lsp' }

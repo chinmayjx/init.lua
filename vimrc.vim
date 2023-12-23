@@ -1,24 +1,3 @@
-function g:CJtrailingNum(s)
-	let i=len(a:s)-1
-	let n=0
-	let p=1
-	while i>=0 && a:s[i]>='0' && a:s[i]<='9'
-		let n=str2nr(a:s[i])*p+n
-		let p=p*10
-		let i=i-1
-	endwhile
-
-	return [a:s[:i],n]
-endfunction
-
-function g:CJnextFileNo()
-	let x=g:CJtrailingNum(expand("%:p:r"))
-	:execute "e " . x[0] . (x[1]+1) . "." . expand("%:e")
-endfunction
-
-nnoremap <Leader>ne :enew<CR>
-nnoremap <Leader>nn :call g:CJnextFileNo()<CR>
-
 runtime ftplugin/man.vim
 command! -nargs=1 EditReg call feedkeys(":let @" . <f-args> . "='" . execute("echo @" . <f-args> )[1:] . "'")
 nnoremap <Leader>@ :EditReg 
@@ -53,14 +32,18 @@ nnoremap <M-down> <C-w><down>
 nnoremap <M-up> <C-w><up>
 
 tnoremap <M-e> <C-\><C-n>
-tnoremap <M-k> <C-\><C-n><C-w><up>
-tnoremap <M-j> <C-\><C-n><C-w><down>
-tnoremap <M-h> <C-\><C-n><C-w><left>
-tnoremap <M-l> <C-\><C-n><C-w><right>
+tnoremap <M-up> <C-\><C-n><C-w><up>
+tnoremap <M-down> <C-\><C-n><C-w><down>
+tnoremap <M-left> <C-\><C-n><C-w><left>
+tnoremap <M-right> <C-\><C-n><C-w><right>
 
 nnoremap <Leader>`n :e ~/.config/nvim/init.lua<CR>
 nnoremap <Leader>`s :w \| source ~/.config/nvim/init.lua<CR>
 nnoremap <Leader>`t :e ~/.config/nvim/snippets/
+
+" store n{j,k} in jumplist
+nnoremap <expr> k (v:count > 1 ? "m'" . v:count : '') . 'k'
+nnoremap <expr> j (v:count > 1 ? "m'" . v:count : '') . 'j'
 
 function s:copyFromFile(fnm)
   silent exec ":silent w | silent !cp " . a:fnm . " %"
@@ -91,31 +74,9 @@ function s:InsertTime()
   let @t = trim(system('date +\%I:\%M\%p'))
 endfunction
 
-function s:toggleCheckBox()
-  let cases = [ ' ', 'x', ' '] " extra space to help cycling
-  exec 'keeppatterns s#^\s*- \[\zs['.join(cases,'').']\ze\]#\=cases[index(cases, submatch(0))+1]#'
-endfunction
-
-function s:checkboxSetup()
-  nnoremap <buffer> <M-a> :call <SID>toggleCheckBox()<CR>
-endfunction
-
 function s:CJFileTypeInit()
-  " let autoClose = "()[]{}"
-	" let autoCloseSolo = "`"
-	let b:CJCommentChar = '#'
 	let x = expand('%:e')
-	if index(["c","cpp","java","js","jsx","ts","tsx","h"],x) >= 0
-		let b:CJCommentChar = '\/\/'
-	elseif x == "vim"
-		let b:CJCommentChar = '"'
-	elseif x == "lua"
-		let b:CJCommentChar = '--'
-	elseif x == "tex"
-		let b:CJCommentChar = '%'
-    let autoCloseSolo=autoCloseSolo . "$"
-    nmap <buffer> ,co vie:s/  / /g<CR><C-l>gv<
-  elseif x == "md"
+  if x == "md"
     call s:checkboxSetup()
     inoremap <buffer><M-i> **<left>
     inoremap <buffer><F4>3 ###<space>
@@ -138,9 +99,6 @@ function s:CJFileTypeInit()
   endif
 endfunction
 
-nnoremap <silent><expr> ,/ match(getline("."),"^\\s*" . b:CJCommentChar) == -1 ? ':exec "s/^\\(\\s*\\)/\\1" . b:CJCommentChar . " /" \| noh<CR>j' : ':exec "s/^\\(\\s*\\)" . b:CJCommentChar . " /\\1/" \| noh<CR>'
-vnoremap <silent><expr> ,/ match(getline("."),"^\\s*" . b:CJCommentChar) == -1 ? '<esc>:exec "'."'".'<,'."'".'>s/^\\(\\s*\\)/\\1" . b:CJCommentChar . " /" \| noh<CR>' : '<esc>:exec "'."'".'<,'."'".'>s/^\\(\\s*\\)" . b:CJCommentChar . " /\\1/" \| noh<CR>'
-
 let g:CJIsInsert = 1
 function g:CJpaste(s)
   let @y=a:s
@@ -160,23 +118,10 @@ function g:CJClipboardItems()
   return clip
 endfunction
 
-function s:closeUselessBuffers()
-	for b in filter(range(1,bufnr('$')), 'bufexists(v:val)')
-    let bi = getbufinfo(b)[0]
-		let nm = bi.name
-		if nm[:6] == "term://" || (empty(nm) && bi.changed == 0)
-			silent! exec "bd! " . b
-		endif
-	endfor
-endfunction
-nnoremap ,k :call <SID>closeUselessBuffers()<CR>
-
 function s:CJWinEnterSetup()
 	if bufname(winbufnr(0))[:6] == "term://"
 		startinsert
-  elseif win_gettype() == "quickfix" || win_gettype() == "loclist"
-    noremap <buffer> <CR> <CR>
-	endif
+  endif
 endfunction
 
 function s:CJTermSetup()
@@ -185,8 +130,6 @@ function s:CJTermSetup()
 endfunction
 
 function s:CJCmdwinEnterSetup()
-	noremap <buffer> <CR> <CR>
-	inoremap <buffer> <CR> <CR>
 	map <buffer> <F5> <CR>q:
 endfunction
 
