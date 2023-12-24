@@ -13,100 +13,66 @@ local setupUI = function(opts)
     float = { border = opts.border }
   })
 end
-setupUI({ border = "rounded" })
 
 local defaultKeymaps = function(opts)
-  local fmt = function(cmd) return function(str) return cmd:format(str) end end
-
   local buffer = opts.buffer or 0
-
-  local lsp = fmt('<cmd>lua vim.lsp.%s<cr>')
-  local diagnostic = fmt('<cmd>lua vim.diagnostic.%s<cr>')
-
   local map = function(m, lhs, rhs)
-    local key_opts = { buffer = buffer }
+    local key_opts = {
+      buffer = buffer,
+      desc = "lsp.lua"
+    }
     SMap(m, lhs, rhs, key_opts)
   end
 
-  map('n', 'K', lsp 'buf.hover()')
-  map('n', 'gd', lsp 'buf.definition()')
-  map('n', 'gD', lsp 'buf.declaration()')
-  map('n', 'gi', lsp 'buf.implementation()')
-  map('n', 'go', lsp 'buf.type_definition()')
-  map('n', 'gs', lsp 'buf.signature_help()')
-  map('n', '<leader><F2>', lsp 'buf.rename()')
-  map('n', '<leader>ff', lsp 'buf.format({async = true})')
-  map('v', '<leader>ff', lsp 'buf.format({async = true})')
-  map('n', '<leader>ca', lsp 'buf.code_action()')
+  local async = function(fn)
+    return function()
+      fn({ async = true })
+    end
+  end
+
+  map('n', 'K', vim.lsp.buf.hover)
+  map('n', 'gd', vim.lsp.buf.definition)
+  map('n', 'gD', vim.lsp.buf.declaration)
+  map('n', 'gi', vim.lsp.buf.implementation)
+  map('n', 'go', vim.lsp.buf.type_definition)
+  map('n', 'gs', vim.lsp.buf.signature_help)
+  map('n', '<leader><F2>', vim.lsp.buf.rename)
+  map({ 'n', 'v' }, '<leader>ff', async(vim.lsp.buf.format))
+  map('n', '<leader>ca', vim.lsp.buf.code_action)
 
   if vim.lsp.buf.range_code_action then
-    map('x', '<leader>ca', lsp 'buf.range_code_action()')
+    map('x', '<leader>ca', vim.lsp.buf.range_code_action)
   else
-    map('x', '<leader>ca', lsp 'buf.code_action()')
+    map('x', '<leader>ca', vim.lsp.buf.code_action)
   end
 
-  map('n', '[d', diagnostic 'goto_prev()')
-  map('n', ']d', diagnostic 'goto_next()')
+  map('n', '[d', vim.diagnostic.goto_prev)
+  map('n', ']d', vim.diagnostic.goto_next)
 end
 
-local nvimLuaLS = function(opts)
-  local runtime_path = vim.split(package.path, ';')
-  table.insert(runtime_path, 'lua/?.lua')
-  table.insert(runtime_path, 'lua/?/init.lua')
-  local root = vim.fs.normalize("~/.local/share/nvim/site/pack/packer/start/")
-  local lib_paths = {
-    vim.fn.expand('$VIMRUNTIME/lua'),
-    vim.fn.stdpath('config') .. '/lua',
-  }
-  local plugs = vim.fn.readdir(root)
-  for _, v in ipairs(plugs) do
-    table.insert(lib_paths, root .. v .. "/lua")
-  end
+local mason = require("mason")
+local mason_lspcfg = require("mason-lspconfig")
+local neodev = require("neodev")
+local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
-
-  local config = {
-    settings = {
-      Lua = {
-        telemetry = { enable = false },
-        runtime = {
-          version = 'LuaJIT',
-          path = runtime_path,
-        },
-        diagnostics = {
-          globals = { 'vim' }
-        },
-        workspace = {
-          checkThirdParty = false,
-          library = lib_paths
-        }
-      }
-    }
-  }
-
-  return vim.tbl_deep_extend('force', config, opts or {})
-end
-
-require('mason').setup()
-
-require('mason-lspconfig').setup({
+setupUI({ border = "rounded" })
+mason.setup()
+mason_lspcfg.setup({
   ensure_installed = {
   }
 })
+neodev.setup({})
 
-local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
+lsp_capabilities = cmp_nvim_lsp.default_capabilities(lsp_capabilities)
+
 local lsp_attach = function(client, bufnr)
   defaultKeymaps({ buffer = bufnr })
 end
 
 local lspconfig = require('lspconfig')
-require('mason-lspconfig').setup_handlers({
+mason_lspcfg.setup_handlers({
   function(server_name)
-    if server_name == 'lua_ls' then
-      return lspconfig.lua_ls.setup(nvimLuaLS({
-        on_attach = lsp_attach,
-        capabilities = lsp_capabilities,
-      }))
-    end
     lspconfig[server_name].setup({
       on_attach = lsp_attach,
       capabilities = lsp_capabilities,
@@ -115,5 +81,4 @@ require('mason-lspconfig').setup_handlers({
 })
 
 SMap('n', '<leader>e', vim.diagnostic.open_float)
-SMap('n', '<leader>fg', ":Format<CR>")
-SMap('v', '<leader>fg', ":Format<CR>")
+SMap({ 'n', 'v' }, '<leader>fg', ":Format<CR>")
