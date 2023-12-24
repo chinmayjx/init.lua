@@ -33,6 +33,7 @@ nvtree.setup({
     end
     map("n", "<leader>s", grepInDir)
   end,
+  sync_root_with_cwd = true,
   sort_by = "case_sensitive",
   view = {
     width = defaultWidth,
@@ -65,6 +66,6 @@ local WidthToggle = function()
 end
 
 Map("n", "<leader>qq", function() tree.toggle({ path = vim.fn.getcwd() }) end)
-Map("n", "<leader>qc", function() tree.open({ find_file = true, update_root = true }) end)
+Map("n", "<leader>qc", function() tree.open({ find_file = true }) end)
 Map("n", "<C-q>", vim.cmd.NvimTreeOpen)
 Map("n", "<leader>qw", WidthToggle)
