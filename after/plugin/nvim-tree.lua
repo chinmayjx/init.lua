@@ -8,7 +8,7 @@ local tree = api.tree
 local View = require('nvim-tree.view').View
 local cj_telescope = require("cj.telescope")
 
-local function grepInDir(dir)
+local function grepInDir()
   local pth = tree.get_node_under_cursor().absolute_path
   if pth == nil then
     return
@@ -16,13 +16,7 @@ local function grepInDir(dir)
   if vim.fn.isdirectory(pth) == 0 then
     pth = vim.fs.dirname(pth)
   end
-  cj_telescope.liveGrep({
-    cwd = pth,
-    grep_open_files = false,
-    additional_args = {
-      "--follow",
-    }
-  })
+  cj_telescope.liveGrep({ cwd = pth })
 end
 
 nvtree.setup({
