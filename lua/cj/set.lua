@@ -13,6 +13,7 @@ vim.opt.autoread = true
 vim.opt.autoindent = true
 vim.opt.smartindent = true
 
+vim.o.hlsearch = false
 vim.opt.incsearch = true
 vim.opt.termguicolors = true
 
