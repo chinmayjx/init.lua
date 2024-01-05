@@ -20,7 +20,7 @@ local ignore_dirs = {
   '__mocks__',
 }
 local ignore_files = {
-  '.sesh.vim'
+  '.cmd.bash'
 }
 
 local cmd = {
