@@ -47,6 +47,7 @@ SMap("n", "<leader>co", ":copen<CR>")
 SMap("n", "<leader>cn", ":cnext<CR>")
 SMap("n", "<leader>cp", ":cprev<CR>")
 
+SMap("n", "<C-M-l>", function () vim.o.hlsearch = not vim.o.hlsearch end)
 SMap("n", "<leader>li", ":lua print(vim.inspect())<left><left>")
 SMap("n", "<leader>nw", ":setl nowrap<CR>")
 
