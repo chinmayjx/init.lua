@@ -78,3 +78,7 @@ local run = function()
 end
 
 Map({ "n", "i" }, "<M-b>", run)
+
+return {
+  runInTerminal = runInTerminal
+}

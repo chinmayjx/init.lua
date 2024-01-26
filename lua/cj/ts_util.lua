@@ -10,8 +10,8 @@ function CurrentFunction()
       local name = node:field("name")[1]
       if name ~= nil then
         local x1, y1, x2, y2 = name:range()
-        local line = vim.api.nvim_buf_get_lines(0, x1, x1+1, false)[1]:sub(y1, y2)
-        print(line)
+        local line = vim.api.nvim_buf_get_lines(0, x1, x1+1, false)[1]:sub(y1+1, y2)
+        return line
       end
       break
     end
