@@ -13,3 +13,10 @@ require('Comment').setup({
     block = ',?',
   },
 })
+
+vim.keymap.set('i', '<C-j>', 'copilot#Accept("")', {
+  expr = true,
+  replace_keycodes = false
+})
+vim.g.copilot_no_tab_map = true
+SMap("i", "<M-C-j>", "<Plug>(copilot-accept-line)")
