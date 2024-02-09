@@ -81,4 +81,6 @@ mason_lspcfg.setup_handlers({
 })
 
 SMap('n', '<leader>e', vim.diagnostic.open_float)
+SMap('n', ']e', vim.diagnostic.goto_next)
+SMap('n', '[e', vim.diagnostic.goto_prev)
 SMap({ 'n', 'v' }, '<leader>fg', ":Format<CR>")
