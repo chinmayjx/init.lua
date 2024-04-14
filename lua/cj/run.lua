@@ -52,7 +52,7 @@ local run = function()
     if cwd == home .. "/documents/dsal" then
       dirTerm("./run " .. fbn)
     else
-      dirTerm("g++ -o " .. fbn .. " " .. fn .. "; ./" .. fbn)
+      dirTerm("clang++ --std=c++11 -o " .. fbn .. " " .. fn .. "; ./" .. fbn)
     end
   elseif x == "py" then
     if not runPython() then
