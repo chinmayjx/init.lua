@@ -80,17 +80,19 @@ Map('n', '<leader>tp', builtin.commands)
 Map('n', '<leader>to', builtin.oldfiles)
 Map('n', '<leader>th', builtin.help_tags)
 
+local openWithTrouble = require("trouble.sources.telescope").open
+
 telescope.setup({
   defaults = {
     mappings = {
       i = {
         ["<esc>"] = actions.close,
-        ["<c-t>"] = trouble.open_with_trouble,
+        ["<c-t>"] = openWithTrouble,
         ["<C-Down>"] = actions.cycle_history_next,
         ["<C-Up>"] = actions.cycle_history_prev,
       },
       n = {
-        ["<c-t>"] = trouble.open_with_trouble,
+        ["<c-t>"] = openWithTrouble,
       }
     },
     layout_config = {

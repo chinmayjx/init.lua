@@ -33,5 +33,5 @@ vim.opt.guicursor = "n-v-c-ci-cr-sm:block,i-ve:ver25,r-o:hor20"
 
 vim.o.foldmethod = "expr"
 vim.o.foldexpr = "nvim_treesitter#foldexpr()"
-vim.o.foldnestmax="10"
-vim.o.foldenable=false
+vim.o.foldnestmax = 10
+vim.o.foldenable = false
