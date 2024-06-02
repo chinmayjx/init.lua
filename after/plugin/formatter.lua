@@ -27,6 +27,12 @@ require("formatter").setup {
     css = {
       filetypes.css.prettier
     },
+    html = {
+      filetypes.html.prettier
+    },
+    xml = {
+      filetypes.xml.tidy
+    },
     ["*"] = {
       filetypes.any.remove_trailing_whitespace
     }

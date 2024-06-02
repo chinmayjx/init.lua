@@ -20,7 +20,7 @@ end
 
 local runPython = function()
   local bd = vim.fn.expand("%:p:r")
-  local root = vim.fs.find({ "pyrightconfig.json", { start = bd, upward = true } })
+  local root = vim.fs.find("pyrightconfig.json", { start = bd, upward = true })
   if #root > 0 then
     local rd = vim.fs.dirname(root[1])
     local fp = string.sub(bd, #rd + 2)
@@ -46,6 +46,11 @@ local run = function()
 
   local dirTerm = function(cmd)
     runInDirectory(cmd, fwd)
+  end
+
+  if vim.fn.filereadable(".run.bash") == 1 then
+    dirTerm("source .run.bash")
+    return
   end
 
   if vim.tbl_contains({ "c", "cpp" }, x) then

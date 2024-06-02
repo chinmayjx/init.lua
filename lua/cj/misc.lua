@@ -77,6 +77,20 @@ local function toggleTerm()
   end
  end
 
+local highlightN = 1
+local function highlightTableN(delta)
+  local to = vim.v.count - 1
+  if to == -1 then
+    highlightN = highlightN + delta
+    to = highlightN
+  else
+    highlightN = to
+  end
+  vim.cmd("/^\\v([^\\t]*\\t){" .. to .. "}\\zs[^\\t]+/-1")
+end
+
+SMap("n", ",cn", function() highlightTableN(1) end)
+SMap("n", ",cp", function() highlightTableN(-1) end)
 SMap("t", "<M-[>0#00", toggleTerm)
 SMap("n", "<M-[>0#00", toggleTerm)
 SMap("n", ",kk", closeUselessBuffers)
