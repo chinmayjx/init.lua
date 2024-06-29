@@ -9,6 +9,8 @@ local action_state = require("telescope.actions.state")
 local trouble = require("trouble.providers.telescope")
 local conf = require("telescope.config").values
 
+local PATH_DISPLAY = { "filename_first", truncate = 1 }
+
 local ignore_dirs = {
   'node_modules',
   '.venv',
@@ -20,7 +22,11 @@ local ignore_dirs = {
   '__mocks__',
 }
 local ignore_files = {
-  '.cmd.bash'
+  '.cmd.bash',
+  '.pdf',
+  ".db",
+  ".class",
+  ".DS_Store",
 }
 
 local cmd = {
@@ -31,7 +37,8 @@ local cmd = {
   "--no-ignore-exclude",
   "--no-ignore-global",
   "--no-ignore-vcs",
-  "--no-ignore-parent"
+  "--no-ignore-parent",
+  "--no-binary",
 }
 for i = 1, #ignore_dirs do
   table.insert(cmd, "-g")
@@ -54,9 +61,9 @@ local liveGrep = function(opts)
   builtin.live_grep(dopts)
 end
 
-Map('n', '<C-p>', function() builtin.find_files({ find_command = cmd }) end)
-Map('n', '<C-M-p>', function() builtin.find_files({ hidden = true, no_ignore = true, no_ignore_parent = true }) end)
-Map('n', '<M-p>', builtin.git_files)
+Map('n', '<C-p>', function() builtin.find_files({ find_command = cmd, path_display = PATH_DISPLAY }) end)
+Map('n', '<C-M-p>', function() builtin.find_files({ hidden = true, no_ignore = true, no_ignore_parent = true, path_display = PATH_DISPLAY }) end)
+Map('n', '<M-p>', function () builtin.git_files({ path_display = PATH_DISPLAY }) end)
 Map('n', '<leader>t/', function()
   builtin.current_buffer_fuzzy_find({ previewer = false })
 end)
@@ -65,7 +72,7 @@ Map('n', '<leader>tS', function()
 end)
 Map('n', '<leader>ts', liveGrep)
 Map('n', '<leader>tt', builtin.builtin)
-Map('n', '<leader>tb', builtin.buffers)
+Map('n', '<leader>tb', function() builtin.buffers({path_display = PATH_DISPLAY}) end)
 Map('n', '<leader>tr', builtin.pickers)
 Map('n', '<leader>tg', builtin.git_status)
 Map('n', '<leader>tw', builtin.grep_string)
