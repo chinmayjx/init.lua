@@ -18,5 +18,8 @@ local function executeLastTest()
   run.runInTerminal(lastTest)
 end
 
-SMap("n", "<leader>up", pytestExecuteFn, {desc = "pytest run function"})
-SMap("n", "<leader>ul", executeLastTest, {desc = "executeLastTest"})
+
+return {
+  pytestExecuteFn = pytestExecuteFn,
+  executeLastTest = executeLastTest
+}

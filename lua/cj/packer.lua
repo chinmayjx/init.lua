@@ -15,6 +15,8 @@ return require('packer').startup(function(use)
     run = ":MasonUpdate"
   }
   use { 'williamboman/mason-lspconfig.nvim' }
+  use 'mfussenegger/nvim-lint'
+
   -- editing
   use "windwp/nvim-autopairs"
   use "nvim-treesitter/nvim-treesitter-context"

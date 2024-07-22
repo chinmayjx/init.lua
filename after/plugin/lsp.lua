@@ -38,7 +38,6 @@ local defaultKeymaps = function(opts)
   map('n', 'gs', vim.lsp.buf.signature_help)
   map('n', '<leader><F2>', vim.lsp.buf.rename)
   map({ 'n', 'v' }, '<leader>ff', async(vim.lsp.buf.format))
-  map('n', '<leader>ca', vim.lsp.buf.code_action)
 
   if vim.lsp.buf.range_code_action then
     map('x', '<leader>ca', vim.lsp.buf.range_code_action)
