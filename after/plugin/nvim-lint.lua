@@ -3,7 +3,7 @@ local lint = require('lint')
 assert(lint, 'Lint is not loaded')
 
 lint.linters_by_ft = {
-  python = { 'pylint' }
+  -- python = { 'pylint' }
 }
 
 

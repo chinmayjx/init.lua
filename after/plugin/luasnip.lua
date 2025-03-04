@@ -6,7 +6,8 @@ local js_root = {
 }
 
 local python_snips = {
-  parse("fr", "for ${1:i} in range($2):\n\t${3:pass}\n$0")
+  parse("fr", "for ${1:i} in range($2):\n\t${3:pass}\n$0"),
+  parse("copy", "import pyperclip\npyperclip.copy($1)$0"),
 }
 
 local lua_snips = {

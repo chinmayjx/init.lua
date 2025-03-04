@@ -18,6 +18,15 @@ local runInDirectory = function(cmd, dir)
   vim.cmd("tcd " .. cwd)
 end
 
+local lastCmd = nil
+
+local rerunLast = function()
+  print("rerun", lastCmd)
+  if lastCmd then
+    runInDirectory(lastCmd.cmd, lastCmd.dir)
+  end
+end
+
 local runPython = function()
   local bd = vim.fn.expand("%:p:r")
   local root = vim.fs.find("pyrightconfig.json", { start = bd, upward = true })
@@ -27,8 +36,13 @@ local runPython = function()
     local mn = string.gsub(fp, "/", ".")
     if mn:sub(1, 4) == "src." then
       mn = mn:sub(5)
-      runInDirectory("python3 -m " .. mn, rd .. "/src")
+      local cmd = "python3 -m " .. mn
+      local dir = rd .. "/src"
+      lastCmd = { cmd = cmd, dir = dir }
+      runInDirectory(cmd, dir)
     else
+      local cmd = "python3 -m " .. mn
+      lastCmd = { cmd = cmd, dir = rd }
       runInDirectory("python3 -m " .. mn, rd)
     end
     return true
@@ -45,6 +59,7 @@ local run = function()
   vim.cmd("w")
 
   local dirTerm = function(cmd)
+    lastCmd = { cmd = cmd, dir = fwd }
     runInDirectory(cmd, fwd)
   end
 
@@ -83,6 +98,7 @@ local run = function()
 end
 
 Map({ "n", "i" }, "<M-b>", run)
+Map({ "n", "i" }, "<M-B>", rerunLast)
 
 return {
   runInTerminal = runInTerminal
